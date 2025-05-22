@@ -1,3 +1,4 @@
+"use client";
 import { deleteStudy } from "@/actions/study-actions";
 import { useTransition } from "react";
 
@@ -11,7 +12,7 @@ export default function DeleteButton({ postId }: { postId: number }) {
   };
 
   return (
-    <button onClick={handleDelete} disabled={isPending}>
+    <button onClick={handleDelete} disabled={isPending} className="text-gray-400 ">
       {isPending ? "삭제 중.." : "삭제"}
     </button>
   );
