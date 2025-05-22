@@ -1,0 +1,52 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Study {
+  id        Int      @id @default(autoincrement())
+  category  String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  like      Int      @default(0) // 누적 좋아요 수
+
+  authorId Int // 작성자 아이디
+  author   User   @relation(fields: [authorId], references: [id])
+  likes    Like[] // 이 Study에 좋아요 누른 사람들
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  userId    String    @unique
+  password  String
+  nickname  String    @unique
+  createdAt DateTime  @default(now())
+  sessions  Session[]
+  studies   Study[]
+  likes     Like[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+}
+
+model Like {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  studyId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  study Study @relation(fields: [studyId], references: [id])
+
+  @@unique([userId, studyId]) // 유저당 한 게시글에 하나씩 
+}
