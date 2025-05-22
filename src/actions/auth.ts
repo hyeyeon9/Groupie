@@ -53,7 +53,7 @@ export async function signup(prevState: FormState, formData: FormData) {
       },
     });
 
-    redirect("/study");
+    redirect("/?mode=login");
   } catch (err: unknown) {
     if (
       err instanceof Prisma.PrismaClientKnownRequestError &&
