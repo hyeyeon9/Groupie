@@ -53,7 +53,12 @@ export default async function StudyDetailPage({
       )}
       <div className="flex justify-between">
         <p>{post.author.nickname}</p>
-        <LikeButton studyId={post.id} initialLikeCount={post.like} initiallyLiked={initiallyLiked}/>
+
+        <LikeButton
+          studyId={post.id}
+          initialLikeCount={post.like}
+          initiallyLiked={initiallyLiked}
+        />
       </div>
       <p className="bg-gray-200 text-sm w-fit px-3 py-1  text-teal-500 rounded-full mb-2">
         {post.category}

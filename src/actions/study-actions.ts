@@ -84,3 +84,56 @@ export async function deleteStudy(id: number) {
 
   redirect(`/study`); //  수정후 상세페이지로 돌아가기
 }
+
+export async function toggleLike(studyId: number) {
+  const { user } = await verifyAuth();
+
+  if (!user) {
+    return {
+      error: "로그인이 필요합니다.",
+    };
+  }
+
+  const existing = await prisma.like.findUnique({
+    where: {
+      userId_studyId: {
+        userId: user.id,
+        studyId,
+      },
+    },
+  });
+
+  if (existing) {
+    // 좋아요가 있는 경우
+    await prisma.like.delete({
+      where: {
+        userId_studyId: {
+          userId: user.id,
+          studyId,
+        },
+      },
+    });
+
+    await prisma.study.update({
+      where: {
+        id: studyId,
+      },
+      data: { like: { decrement: 1 } },
+    });
+    return { liked: false };
+  } else {
+    await prisma.like.create({
+      data: {
+        userId: user.id,
+        studyId,
+      },
+    });
+
+    await prisma.study.update({
+      where: { id: studyId },
+      data: { like: { increment: 1 } },
+    });
+
+    return { liked: true };
+  }
+}
