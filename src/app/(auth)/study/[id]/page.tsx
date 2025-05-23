@@ -1,5 +1,5 @@
-import DeleteButton from "@/components/DeleteButton";
-import LikeButton from "@/components/LikeButton";
+import DeleteButton from "@/components/buttons/DeleteButton";
+import LikeButton from "@/components/buttons/LikeButton";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";

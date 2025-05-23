@@ -1,4 +1,4 @@
-import StudyForm from "@/components/StudyForm";
+import StudyForm from "@/components/forms/StudyForm";
 
 export default function NewStudy() {
   return (
