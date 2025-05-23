@@ -1,4 +1,4 @@
-import StudyList from "@/components/StudyList";
+import StudyList from "@/components/lists/StudyList";
 import Link from "next/link";
 
 export default function StudyHomePage() {

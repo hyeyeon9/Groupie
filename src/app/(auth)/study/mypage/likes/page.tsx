@@ -1,5 +1,4 @@
-
-import StudyListForMyPage from "@/components/lists/StudyListForMyPage";
+import LikedPostList from "@/components/lists/LikedPostList";
 import MyPageTabs from "@/components/MyPageTabs";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -23,7 +22,7 @@ export default async function MyPage() {
       <h1>마이페이지</h1>
       <p>{userInfo?.nickname}</p>
       <MyPageTabs />
-      <StudyListForMyPage userId={user.id}/>
+      <LikedPostList userId={user.id}/>
     </div>
   );
 }
