@@ -1,9 +1,14 @@
+import { formatRelativeTime } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export default async function StudyList() {
+export default async function StudyList({ category }: { category?: string }) {
+  const where = category && category !== "전체" ? { category } : {};
+
   const studies = await prisma.study.findMany({
-    orderBy: { createdAt: "desc" }, // 내림차순으로 데이터 모두 select
+    where,
+    orderBy: { createdAt: "desc" },
+    include: { author: true, comments: true }, // 내림차순으로 데이터 모두 select
   });
 
   if (studies.length === 0) {
@@ -20,6 +25,21 @@ export default async function StudyList() {
             </p>
             <p className="text-xl font-bold mt-2">{study.title}</p>
             <p className="text-gray-600 mt-1">{study.content}</p>
+
+            <div className="flex gap-2 text-sm font-light mt-2">
+              <p>{formatRelativeTime(new Date(study.createdAt))}</p>
+              <p>{study.comments.length}개의 댓글</p>
+            </div>
+            <div className="flex justify-between text-sm mt-2 border-t-1 py-3">
+              <p>
+                <span className="text-gray-400 mr-1.5">by</span>
+                {study.author.nickname}
+              </p>
+              <p className="flex gap-2.5">
+                <span>🖤 </span>
+                {study.like}
+              </p>
+            </div>
           </div>
         </Link>
       ))}
