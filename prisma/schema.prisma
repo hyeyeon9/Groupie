@@ -9,19 +9,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 스터디 글 테이블
 model Study {
   id        Int      @id @default(autoincrement())
   category  String
   title     String
   content   String
   createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt 
   like      Int      @default(0) // 누적 좋아요 수
 
   authorId Int // 작성자 아이디
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id])
   likes    Like[] // 이 Study에 좋아요 누른 사람들
+  comments Comment[]
 }
 
+// 유저 테이블
 model User {
   id        Int       @id @default(autoincrement())
   userId    String    @unique
@@ -31,8 +35,10 @@ model User {
   sessions  Session[]
   studies   Study[]
   likes     Like[]
+  comments  Comment[]
 }
 
+// 세션 테이블 
 model Session {
   id        String   @id @default(cuid())
   userId    Int
@@ -40,6 +46,7 @@ model Session {
   expiresAt DateTime
 }
 
+// 좋아요 테이블
 model Like {
   id      Int @id @default(autoincrement())
   userId  Int
@@ -49,4 +56,18 @@ model Like {
   study Study @relation(fields: [studyId], references: [id])
 
   @@unique([userId, studyId]) // 유저당 한 게시글에 하나씩 
+}
+
+// 댓글 테이블
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt 
+
+  studyId Int
+  study   Study @relation(fields: [studyId], references: [id])
+
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
 }
