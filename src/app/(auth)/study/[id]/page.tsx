@@ -43,7 +43,7 @@ export default async function StudyDetailPage({
 
   return (
     <>
-      <div className="flex flex-col max-w-2xl mx-auto min-h-100 mt-10 p-6 shadow-sm bg-white">
+      <div className="flex flex-col max-w-3xl mx-auto min-h-100 mt-10 p-6 shadow-sm bg-white">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         {post.author.id === user?.id && (
           <div className="flex gap-3 justify-end mb-4">
@@ -68,7 +68,7 @@ export default async function StudyDetailPage({
 
         <p className="text-gray-700 whitespace-pre-line mt-4">{post.content}</p>
       </div>
-      <div className="mt-10">
+      <div className="mt-10 max-w-3xl  mx-auto">
         <CommentList postId={post.id} />
       </div>
     </>

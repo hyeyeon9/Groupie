@@ -1,4 +1,3 @@
-
 import StudyListForMyPage from "@/components/lists/StudyListForMyPage";
 import MyPageTabs from "@/components/MyPageTabs";
 import { verifyAuth } from "@/lib/auth";
@@ -19,11 +18,11 @@ export default async function MyPage() {
   });
 
   return (
-    <div className="min-h-screen w-full p-10">
+    <div className="min-h-screen  max-w-3xl  mx-auto p-10">
       <h1>마이페이지</h1>
       <p>{userInfo?.nickname}</p>
       <MyPageTabs />
-      <StudyListForMyPage userId={user.id}/>
+      <StudyListForMyPage userId={user.id} />
     </div>
   );
 }

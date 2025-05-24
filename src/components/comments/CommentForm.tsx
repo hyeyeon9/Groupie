@@ -13,7 +13,7 @@ export default function CommentForm({ postId }: { postId: number }) {
       <textarea
         name="content"
         placeholder="댓글을 작성하세요."
-        rows={4}
+        rows={3}
         className="p-5 border"
       />
       {formState?.error && <p className="text-red-500">{formState.error}</p>}
