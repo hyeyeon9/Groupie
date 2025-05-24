@@ -2,11 +2,24 @@ import { formatRelativeTime } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export default async function StudyList({ category }: { category?: string }) {
-  const where = category && category !== "전체" ? { category } : {};
-
+export default async function StudyList({
+  category,
+  query,
+}: {
+  category?: string;
+  query?: string;
+}) {
   const studies = await prisma.study.findMany({
-    where,
+    where: { // ...()은 조건이 참이면 객체를 펼쳐 넣겠다는 의미
+      ...(category && category !== "전체" && { category }),
+      ...(query && {
+        OR: [ // 제목이나 본문에 쿼리가 포함되어 있는 경우에 가져옴 (둘중 하나라도)
+          // mode: "insensitive"는 대소문자 구분 없이 찾는다는 말씀
+          { title: { contains: query } },
+          { content: { contains: query } },
+        ],
+      }),
+    },
     orderBy: { createdAt: "desc" },
     include: { author: true, comments: true }, // 내림차순으로 데이터 모두 select
   });
