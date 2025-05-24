@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
+import { verifyAuth } from "@/lib/auth";
+import { error } from "console";
 
 export default async function CommentList({ postId }: { postId: number }) {
   const comments = await prisma.comment.findMany({
@@ -8,7 +10,10 @@ export default async function CommentList({ postId }: { postId: number }) {
     include: { author: true },
   });
 
-  const len = comments.length;
+  const len = comments.length; // 댓글 개수
+
+  // 로그인 정보 불러오기
+  const { user } = await verifyAuth();
 
   return (
     <div className="p-5">
@@ -16,7 +21,7 @@ export default async function CommentList({ postId }: { postId: number }) {
       <CommentForm postId={postId} />
       <div className="mt-5 flex flex-col">
         {comments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} />
+          <CommentItem key={comment.id} currentUserId={user?.id} comment={comment} />
         ))}
       </div>
     </div>

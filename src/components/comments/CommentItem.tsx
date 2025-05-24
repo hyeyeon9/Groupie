@@ -16,7 +16,13 @@ type Props = {
   };
 };
 
-export default function CommentItem({ comment }: Props) {
+export default function CommentItem({
+  comment,
+  currentUserId,
+}: Props & {
+  currentUserId?: number;
+}) {
+  const isMyComment = currentUserId === comment.authorId;
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPending, startTransition] = useTransition();
@@ -38,12 +44,14 @@ export default function CommentItem({ comment }: Props) {
               {formatRelativeTime(new Date(comment.createdAt))}
             </p>
           </div>
-          <div className="flex gap-3 text-gray-400">
-            {!isEditing && (
-              <button onClick={() => setIsEditing(true)}>수정</button>
-            )}
-            <CommentDeleteBtn commentId={comment.id} />
-          </div>
+          {isMyComment && (
+            <div className="flex gap-3 text-gray-400">
+              {!isEditing && (
+                <button onClick={() => setIsEditing(true)}>수정</button>
+              )}
+              <CommentDeleteBtn commentId={comment.id} />
+            </div>
+          )}
         </div>
         {isEditing ? (
           <div className="flex flex-col">
