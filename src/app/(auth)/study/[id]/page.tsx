@@ -4,6 +4,7 @@ import CommentList from "@/components/comments/CommentList";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import ViewCounter from "@/components/ViewCounter";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -43,6 +44,7 @@ export default async function StudyDetailPage({
 
   return (
     <>
+      <ViewCounter id={post.id} />
       <div className="flex flex-col max-w-3xl mx-auto min-h-100 mt-10 p-6 shadow-sm bg-white">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         {post.author.id === user?.id && (
@@ -54,7 +56,10 @@ export default async function StudyDetailPage({
           </div>
         )}
         <div className="flex justify-between">
-          <p>{post.author.nickname}</p>
+          <div className="flex gap-2">
+            <p>{post.author.nickname}</p>
+            <p> 조회수 : {post.views}</p>
+          </div>
 
           <LikeButton
             studyId={post.id}

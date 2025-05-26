@@ -18,6 +18,7 @@ model Study {
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt 
   like      Int      @default(0) // 누적 좋아요 수
+  views     Int      @default(0) // 누적 조회수
 
   authorId Int // 작성자 아이디
   author   User      @relation(fields: [authorId], references: [id])
