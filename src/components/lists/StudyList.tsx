@@ -1,38 +1,104 @@
+"use client";
 import { formatRelativeTime } from "@/lib/date";
-import { prisma } from "@/lib/prisma";
+import { Comment, Study, User } from "@prisma/client";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
-export default async function StudyList({
+type StudyType = Study & {
+  author: User;
+  comments: Comment[];
+};
+
+export default function StudyList({
   category,
   query,
 }: {
   category?: string;
   query?: string;
 }) {
-  const studies = await prisma.study.findMany({
-    where: { // ...()은 조건이 참이면 객체를 펼쳐 넣겠다는 의미
-      ...(category && category !== "전체" && { category }),
-      ...(query && {
-        OR: [ // 제목이나 본문에 쿼리가 포함되어 있는 경우에 가져옴 (둘중 하나라도)
-          // mode: "insensitive"는 대소문자 구분 없이 찾는다는 말씀
-          { title: { contains: query } },
-          { content: { contains: query } },
-        ],
-      }),
-    },
-    orderBy: { createdAt: "desc" },
-    include: { author: true, comments: true }, // 내림차순으로 데이터 모두 select
-  });
+  const [studies, setStudies] = useState<StudyType[]>([]);
+  const [cursor, setCursor] = useState<number | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  if (studies.length === 0) {
-    return <p>등록된 글이 없습니다. </p>;
+  const fetchStudies = async (reset = false) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      const params = new URLSearchParams();
+      if (cursor && !reset) params.append("cursor", cursor.toString());
+      if (category) params.append("category", category);
+      if (query) params.append("query", query);
+
+      const res = await fetch(`/api/studies?${params.toString()}`);
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
+      const data = await res.json();
+
+      if (reset) {
+        setStudies(data.posts);
+      } else {
+        setStudies((prev) => [...prev, ...data.posts]);
+      }
+      
+      setCursor(data.nextCursor);
+      setHasMore(data.hasMore);
+    } catch (error) {
+      console.error("Failed to fetch studies:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 초기 로딩 및 카테고리/쿼리 변경 시 리셋
+  useEffect(() => {
+    setStudies([]);
+    setCursor(null);
+    setHasMore(true);
+    setInitialized(false);
+    fetchStudies(true).then(() => setInitialized(true)); // 현재 커서가 null일때 (가장 처음)바로 fetch해야 한다. 
+  }, [category, query]);
+
+  // 무한스크롤 observer
+  useEffect(() => {
+    if (!observerRef.current || !hasMore || loading || !initialized) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && cursor) {
+          fetchStudies();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [hasMore, loading, cursor, initialized]);
+
+  if (!initialized && loading) {
+    return <p>로딩 중...</p>;
+  }
+
+  if (initialized && studies.length === 0) {
+    return <p>등록된 글이 없습니다.</p>;
   }
 
   return (
     <div className="grid grid-cols-3 mt-10 gap-8">
-      {studies.map((study) => (
+      {studies.map((study, index) => (
         <Link href={`/study/${study.id}`} key={study.id}>
-          <div className="flex flex-col g-2 shadow-sm p-4 rounded-lg">
+          <div
+            ref={index === studies.length - 1 ? observerRef : null}
+            className="flex flex-col gap-2 shadow-sm p-4 rounded-lg"
+          >
             <p className="bg-gray-200 text-sm w-fit rounded-full text-center px-3 py-1">
               {study.category}
             </p>
@@ -43,7 +109,7 @@ export default async function StudyList({
               <p>{formatRelativeTime(new Date(study.createdAt))}</p>
               <p>{study.comments.length}개의 댓글</p>
             </div>
-            <div className="flex justify-between text-sm mt-2 border-t-1 py-3">
+            <div className="flex justify-between text-sm mt-2 border-t pt-3">
               <p>
                 <span className="text-gray-400 mr-1.5">by</span>
                 {study.author.nickname}
@@ -56,6 +122,7 @@ export default async function StudyList({
           </div>
         </Link>
       ))}
+      {loading && <p className="col-span-3 text-center">로딩 중...</p>}
     </div>
   );
 }
