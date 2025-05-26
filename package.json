@@ -11,6 +11,8 @@
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@prisma/client": "^5.15.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@uiw/react-md-editor": "^3.6.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "lucia": "^3.2.2",
