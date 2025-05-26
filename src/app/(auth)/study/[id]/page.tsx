@@ -74,11 +74,47 @@ export default async function StudyDetailPage({
             initiallyLiked={initiallyLiked}
           />
         </div>
-        <p className="bg-gray-200 text-sm w-fit px-3 py-1 mt-4 mb-6 text-teal-500 rounded-full ">
-          {post.category}
-        </p>
 
-        <div className="prose max-w-none">
+        <div className="border-t-1 border-t-gray-200 mt-3 py-5 grid grid-cols-2 gap-y-4">
+          <div className="flex gap-5">
+            <p className="font-bold">카테고리 </p>
+            <p className="bg-gray-200 text-sm w-fit px-3 py-1   rounded-full ">
+              {post.category}
+            </p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold">진행 방식 </p>
+            <p>{post.studyType}</p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold">모집 인원 </p>
+            <p>{post.maxParticipants}명</p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold">시작 예정</p>
+            <p>{post.startDate?.toISOString().split("T")[0]}</p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold">연락 방법</p>
+            <p>{post.contactLink}</p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold">모집 여부</p>
+            <p
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                post.startDate && new Date(post.startDate) < new Date()
+                  ? "bg-gray-300 text-gray-500"
+                  : "bg-green-200 text-green-700"
+              }`}
+            >
+              {" "}
+              {post.startDate && new Date(post.startDate) < new Date()
+                ? "모집 마감"
+                : "모집중"}
+            </p>
+          </div>
+        </div>
+        <div className="prose max-w-none py-8">
           <MarkdownPreview content={post.content} />
         </div>
       </div>

@@ -11,28 +11,125 @@ export default function StudyForm() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("코딩");
+  const [studyType, setStudyType] = useState("온라인");
+  const [maxParticipants, setMaxParticipants] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [contactMethod, setContactMethod] = useState("이메일");
+  const [contactLink, setContactLink] = useState("");
 
   return (
     <form className="space-y-6" action={formAction}>
       {/* 카테고리 선택 */}
-      <div>
-        <label
-          htmlFor="category"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          카테고리
-        </label>
-        <select
-          id="category"
-          name="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
-        >
-          <option value="코딩">💻 코딩</option>
-          <option value="어학">🌍 어학</option>
-          <option value="자격증">📜 자격증</option>
-        </select>
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-y-3 gap-x-8">
+        <div>
+          <label
+            htmlFor="category"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            카테고리
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          >
+            <option value="코딩">💻 코딩</option>
+            <option value="어학">🌍 어학</option>
+            <option value="자격증">📜 자격증</option>
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="studyType"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            온/오프라인
+          </label>
+          <select
+            id="studyType"
+            name="studyType"
+            value={studyType}
+            onChange={(e) => setStudyType(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          >
+            <option value="온라인">온라인</option>
+            <option value="오프라인">오프라인</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="maxParticipants"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            모집 인원 수
+          </label>
+          <select
+            id="maxParticipants"
+            name="maxParticipants"
+            value={maxParticipants}
+            onChange={(e) => setMaxParticipants(Number(e.target.value))}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          >
+            <option value="1">1명</option>
+            <option value="2">2명</option>
+            <option value="3">3명</option>
+            <option value="4">4명</option>
+            <option value="5">5명 이상</option>
+          </select>
+        </div>
+
+        {/* 5. 시작일 */}
+        <div>
+          <label
+            htmlFor="startDate"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            모집 마감일
+          </label>
+          <input
+            id="startDate"
+            name="startDate"
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          />
+        </div>
+
+        {/* 6. 연락 방법 */}
+        <div>
+          <label
+            htmlFor="contactMethod"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            연락 방법
+          </label>
+          <select
+            id="contactMethod"
+            name="contactMethod"
+            value={contactMethod}
+            onChange={(e) => setContactMethod(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          >
+            <option value="kakaotalk">이메일</option>
+            <option value="email">오픈톡</option>
+            <option value="googleform">구글폼</option>
+          </select>
+        </div>
+
+        <div>
+          <input
+            name="contactLink"
+            type="text"
+            value={contactLink}
+            onChange={(e) => setContactLink(e.target.value)}
+            placeholder="연락 링크를 입력해주세요"
+            className="mt-6 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+          />
+        </div>
       </div>
 
       {/* 제목 입력 */}

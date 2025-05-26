@@ -19,6 +19,12 @@ export async function createStudy(prevState: FormState, formData: FormData) {
   const category = formData.get("category") as string;
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
+  const studyType = formData.get("studyType") as string;
+  const maxParticipants = Number(formData.get("maxParticipants")) as number;
+  const startDateStr = formData.get("startDate") as string;
+  const startDate = startDateStr ? new Date(startDateStr) : undefined;
+  const contactMethod = formData.get("contactMethod") as string;
+  const contactLink = formData.get("contactLink") as string;
 
   if (!title || !content) {
     return {
@@ -32,6 +38,11 @@ export async function createStudy(prevState: FormState, formData: FormData) {
       title,
       content,
       authorId: user.id,
+      studyType,
+      maxParticipants,
+      startDate,
+      contactMethod,
+      contactLink,
     },
   });
 
@@ -51,6 +62,12 @@ export async function updateStudy(prevState: FormState, formData: FormData) {
   const category = formData.get("category") as string;
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
+  const studyType = formData.get("studyType") as string;
+  const maxParticipants = Number(formData.get("maxParticipants")) as number;
+  const startDateStr = formData.get("startDate") as string;
+  const startDate = startDateStr ? new Date(startDateStr) : undefined;
+  const contactMethod = formData.get("contactMethod") as string;
+  const contactLink = formData.get("contactLink") as string;
 
   if (!title || !content) {
     return {
@@ -64,6 +81,11 @@ export async function updateStudy(prevState: FormState, formData: FormData) {
       category,
       title,
       content,
+      studyType,
+      maxParticipants,
+      startDate,
+      contactMethod,
+      contactLink,
     },
   });
 

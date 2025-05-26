@@ -1,85 +1,85 @@
-"use client"
-import { formatRelativeTime } from "@/lib/date"
-import type { Comment, Study, User } from "@prisma/client"
-import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+"use client";
+import { formatRelativeTime } from "@/lib/date";
+import type { Comment, Study, User } from "@prisma/client";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 type StudyType = Study & {
-  author: User
-  comments: Comment[]
-}
+  author: User;
+  comments: Comment[];
+};
 
 export default function StudyList({
   category,
   query,
 }: {
-  category?: string
-  query?: string
+  category?: string;
+  query?: string;
 }) {
-  const [studies, setStudies] = useState<StudyType[]>([])
-  const [cursor, setCursor] = useState<number | null>(null)
-  const [hasMore, setHasMore] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [initialized, setInitialized] = useState(false)
-  const observerRef = useRef<HTMLDivElement | null>(null)
+  const [studies, setStudies] = useState<StudyType[]>([]);
+  const [cursor, setCursor] = useState<number | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   const fetchStudies = async (reset = false) => {
-    if (loading) return
-    setLoading(true)
+    if (loading) return;
+    setLoading(true);
 
     try {
-      const params = new URLSearchParams()
-      if (cursor && !reset) params.append("cursor", cursor.toString())
-      if (category) params.append("category", category)
-      if (query) params.append("query", query)
+      const params = new URLSearchParams();
+      if (cursor && !reset) params.append("cursor", cursor.toString());
+      if (category) params.append("category", category);
+      if (query) params.append("query", query);
 
-      const res = await fetch(`/api/studies?${params.toString()}`)
+      const res = await fetch(`/api/studies?${params.toString()}`);
 
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`)
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (reset) {
-        setStudies(data.posts)
+        setStudies(data.posts);
       } else {
-        setStudies((prev) => [...prev, ...data.posts])
+        setStudies((prev) => [...prev, ...data.posts]);
       }
 
-      setCursor(data.nextCursor)
-      setHasMore(data.hasMore)
+      setCursor(data.nextCursor);
+      setHasMore(data.hasMore);
     } catch (error) {
-      console.error("Failed to fetch studies:", error)
+      console.error("Failed to fetch studies:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    setStudies([])
-    setCursor(null)
-    setHasMore(true)
-    setInitialized(false)
-    fetchStudies(true).then(() => setInitialized(true))
-  }, [category, query])
+    setStudies([]);
+    setCursor(null);
+    setHasMore(true);
+    setInitialized(false);
+    fetchStudies(true).then(() => setInitialized(true));
+  }, [category, query]);
 
   useEffect(() => {
-    if (!observerRef.current || !hasMore || loading || !initialized) return
+    if (!observerRef.current || !hasMore || loading || !initialized) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && cursor) {
-          fetchStudies()
+          fetchStudies();
         }
       },
-      { threshold: 0.1 },
-    )
+      { threshold: 0.1 }
+    );
 
-    observer.observe(observerRef.current)
+    observer.observe(observerRef.current);
 
-    return () => observer.disconnect()
-  }, [hasMore, loading, cursor, initialized])
+    return () => observer.disconnect();
+  }, [hasMore, loading, cursor, initialized]);
 
   if (!initialized && loading) {
     return (
@@ -87,7 +87,7 @@ export default function StudyList({
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-3 text-gray-600">로딩 중...</span>
       </div>
-    )
+    );
   }
 
   if (initialized && studies.length === 0) {
@@ -96,14 +96,16 @@ export default function StudyList({
         <div className="text-gray-400 text-6xl mb-4">📚</div>
         <p className="text-gray-500 text-lg">등록된 글이 없습니다.</p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">스터디 목록</h2>
-        <span className="text-sm text-gray-500">{studies.length}개의 스터디</span>
+        <span className="text-sm text-gray-500">
+          {studies.length}개의 스터디
+        </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -114,9 +116,20 @@ export default function StudyList({
               className="group bg-white rounded shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
               <div className="space-y-4">
-                <div className="flex items-start justify-between">
+                <div className="flex items-start gap-5">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200">
                     {study.category}
+                  </span>
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                      study.startDate && new Date(study.startDate) < new Date()
+                        ? "bg-gray-300 text-gray-500"
+                        : "bg-green-200 text-green-700"
+                    }`}
+                  >
+                    {study.startDate && new Date(study.startDate) < new Date()
+                      ? "모집 마감"
+                      : "모집중"}
                   </span>
                 </div>
 
@@ -125,7 +138,9 @@ export default function StudyList({
                     {study.title}
                   </h3>
                   <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-                    {study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
+                    {study.content
+                      .replace(/[#_*~`>[\]()\-!\n]/g, "")
+                      .slice(0, 100)}
                   </p>
                 </div>
 
@@ -140,7 +155,9 @@ export default function StudyList({
                     <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
                       <span className="text-xs text-gray-600">👤</span>
                     </div>
-                    <span className="text-sm text-gray-700 font-medium">{study.author.nickname}</span>
+                    <span className="text-sm text-gray-700 font-medium">
+                      {study.author.nickname}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3 text-red-500">
                     <span className="text-sm">🖤</span>
@@ -156,9 +173,11 @@ export default function StudyList({
       {loading && (
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">더 많은 스터디를 불러오는 중...</span>
+          <span className="ml-3 text-gray-600">
+            더 많은 스터디를 불러오는 중...
+          </span>
         </div>
       )}
     </div>
-  )
+  );
 }
