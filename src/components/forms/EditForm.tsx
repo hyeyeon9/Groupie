@@ -1,12 +1,19 @@
 "use client";
 import { updateStudy } from "@/actions/study-actions";
 import { Study } from "@prisma/client";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import PostEditor from "../markdown/MarkdownEditor";
 
 export default function EditForm({ post }: { post: Study }) {
   const [formState, formAction] = useActionState(updateStudy, {
     error: null,
   });
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    setContent(post.content);
+  }, [post.content]);
+
   return (
     <>
       <form className="flex flex-col gap-4" action={formAction}>
@@ -29,17 +36,14 @@ export default function EditForm({ post }: { post: Study }) {
           <option>자격증</option>
         </select>
 
-        <textarea
-          rows={5}
-          name="content"
-          className="border p-2"
-          defaultValue={post.content}
-        />
+        <PostEditor value={content} onChange={(val) => setContent(val || "")} />
+        {/* formData.get("content") 보내기 위해서 아래 코드 추가  */}
+        <input type="hidden" name="content" value={content} />
         {formState?.error && <p className="text-red-500">{formState.error}</p>}
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-blue-500 w-20 p-2 rounded-2xl text-white "
+            className="bg-blue-500 w-20 p-2 rounded text-white hover:cursor-pointer"
           >
             등록하기
           </button>

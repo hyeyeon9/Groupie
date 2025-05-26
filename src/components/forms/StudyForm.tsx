@@ -1,11 +1,15 @@
 "use client";
 import { createStudy } from "@/actions/study-actions";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import PostEditor from "../markdown/MarkdownEditor";
 
 export default function StudyForm() {
   const [formState, formAction] = useActionState(createStudy, {
     error: null,
   });
+
+  const [content, setContent] = useState("");
+
   return (
     <form className="flex flex-col gap-4" action={formAction}>
       <select name="category" className="border p-2">
@@ -19,7 +23,9 @@ export default function StudyForm() {
         type="text"
         className="border p-2"
       />
-      <textarea rows={5} name="content" className="border p-2" />
+      <PostEditor value={content} onChange={(val) => setContent(val || "")} />
+      {/* formData.get("content") 보내기 위해서 아래 코드 추가  */}
+      <input type="hidden" name="content" value={content} />
       {formState?.error && <p className="text-red-500">{formState.error}</p>}
       <div className="flex justify-end">
         <button

@@ -5,6 +5,7 @@ import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import ViewCounter from "@/components/ViewCounter";
+import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -50,7 +51,9 @@ export default async function StudyDetailPage({
         {post.author.id === user?.id && (
           <div className="flex gap-3 justify-end mb-4">
             <Link href={`/study/${post.id}/edit`}>
-              <button className="text-gray-400 ">수정</button>
+              <button className="text-gray-400 hover:cursor-pointer">
+                수정
+              </button>
             </Link>
             <DeleteButton postId={post.id} />
           </div>
@@ -71,7 +74,9 @@ export default async function StudyDetailPage({
           {post.category}
         </p>
 
-        <p className="text-gray-700 whitespace-pre-line mt-4">{post.content}</p>
+        <div className="prose max-w-none">
+          <MarkdownPreview content={post.content} />
+        </div>
       </div>
       <div className="mt-10 max-w-3xl  mx-auto">
         <CommentList postId={post.id} />
