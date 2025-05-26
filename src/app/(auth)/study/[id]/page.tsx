@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import ViewCounter from "@/components/ViewCounter";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
+import { formatRelativeTime } from "@/lib/date";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -44,10 +45,10 @@ export default async function StudyDetailPage({
   }
 
   return (
-    <>
+    <div className="flex flex-col max-w-3xl  mx-auto ">
       <ViewCounter id={post.id} />
-      <div className="flex flex-col max-w-3xl mx-auto min-h-100 mt-10 p-6 shadow-sm bg-white">
-        <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+      <div className="flex  flex-col w-full min-h-100 mt-10 p-6 shadow-sm bg-white">
+        <h1 className="text-5xl font-bold mb-4">{post.title}</h1>
         {post.author.id === user?.id && (
           <div className="flex gap-3 justify-end mb-4">
             <Link href={`/study/${post.id}/edit`}>
@@ -59,9 +60,12 @@ export default async function StudyDetailPage({
           </div>
         )}
         <div className="flex justify-between">
-          <div className="flex gap-2">
-            <p>{post.author.nickname}</p>
-            <p> 조회수 : {post.views}</p>
+          <div className="flex flex-col ">
+            <p className="font-bold">{post.author.nickname}</p>
+            <div className="flex gap-2 text-gray-500 ">
+              <p>{formatRelativeTime(post.createdAt)}</p>
+              <p> 조회수 : {post.views}</p>
+            </div>
           </div>
 
           <LikeButton
@@ -70,7 +74,7 @@ export default async function StudyDetailPage({
             initiallyLiked={initiallyLiked}
           />
         </div>
-        <p className="bg-gray-200 text-sm w-fit px-3 py-1  text-teal-500 rounded-full mb-2">
+        <p className="bg-gray-200 text-sm w-fit px-3 py-1 mt-4 mb-6 text-teal-500 rounded-full ">
           {post.category}
         </p>
 
@@ -78,9 +82,9 @@ export default async function StudyDetailPage({
           <MarkdownPreview content={post.content} />
         </div>
       </div>
-      <div className="mt-10 max-w-3xl  mx-auto">
+      <div className="mt-10 w-full px-5 lg:p-0">
         <CommentList postId={post.id} />
       </div>
-    </>
+    </div>
   );
 }

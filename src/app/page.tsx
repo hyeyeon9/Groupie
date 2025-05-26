@@ -8,7 +8,7 @@ export default function Home({
 }) {
   const mode = searchParams.mode || "login";
   return (
-    <div className="min-h-screen w-full p-10">
+    <div className="min-h-screen max-w-3xl mx-auto   p-10">
       {mode === "login" && <LoginForm />}
       {mode === "signup" && <SignupForm />}
     </div>

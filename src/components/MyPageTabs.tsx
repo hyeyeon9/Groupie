@@ -6,10 +6,10 @@ export default function MyPageTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-4 border-b mb-4">
-      <Link href="/study/mypage">
+    <div className="flex gap-4  mb-4">
+      <Link href="/study/mypage" className="flex-1/2 text-center ">
         <button
-          className={`px-4 py-2 ${
+          className={`px-4 py-2 w-full ${
             pathname === "/study/mypage"
               ? "border-b-2 font-bold"
               : "text-gray-400"
@@ -18,9 +18,9 @@ export default function MyPageTabs() {
           글
         </button>
       </Link>
-      <Link href="/study/mypage/likes">
+      <Link href="/study/mypage/likes" className="flex-1/2 text-center">
         <button
-          className={`px-4 py-2 ${
+          className={`px-4 py-2 w-full ${
             pathname === "/study/mypage/likes"
               ? "border-b-2 font-bold"
               : "text-gray-400"

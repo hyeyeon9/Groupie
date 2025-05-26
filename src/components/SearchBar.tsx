@@ -21,15 +21,22 @@ export default function SearchBar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex border">
-      <input
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        type="text"
-        placeholder="검색어를 입력하세요."
-        className="py-2 px-5  rounded w-11/12"
-      />
-      <button type="submit">🔍</button>
+    <form onSubmit={handleSearch} className="relative">
+      <div className="relative flex items-center">
+        <input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          type="text"
+          placeholder="검색어를 입력하세요."
+          className="w-full pl-4 pr-12 py-3 text-gray-900 placeholder-gray-500 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200"
+        />
+        <button
+          type="submit"
+          className="absolute right-2 p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:text-gray-600"
+        >
+          <span className="text-lg">🔍</span>
+        </button>
+      </div>
     </form>
   );
 }

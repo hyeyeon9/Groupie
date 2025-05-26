@@ -22,14 +22,16 @@ export default function FilterButtons() {
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex  gap-2">
       {categories.map((cat) => (
         <button
           key={cat}
           value={cat}
           onClick={() => handleClick(cat)}
-          className={`px-3 py-2 rounded-full hover:cursor-pointer ${
-            current === cat ? "bg-black text-white" : "text-gray-500"
+          className={`px-3 py-2 text-sm rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:cursor-pointer ${
+            current === cat
+              ? "bg-black text-white shadow-md focus:ring-black-500"
+              : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 focus:ring-gray-500"
           }`}
         >
           {cat}

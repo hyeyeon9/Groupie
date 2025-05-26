@@ -1,130 +1,164 @@
-"use client";
-import { formatRelativeTime } from "@/lib/date";
-import { Comment, Study, User } from "@prisma/client";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+"use client"
+import { formatRelativeTime } from "@/lib/date"
+import type { Comment, Study, User } from "@prisma/client"
+import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 type StudyType = Study & {
-  author: User;
-  comments: Comment[];
-};
+  author: User
+  comments: Comment[]
+}
 
 export default function StudyList({
   category,
   query,
 }: {
-  category?: string;
-  query?: string;
+  category?: string
+  query?: string
 }) {
-  const [studies, setStudies] = useState<StudyType[]>([]);
-  const [cursor, setCursor] = useState<number | null>(null);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [initialized, setInitialized] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const [studies, setStudies] = useState<StudyType[]>([])
+  const [cursor, setCursor] = useState<number | null>(null)
+  const [hasMore, setHasMore] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [initialized, setInitialized] = useState(false)
+  const observerRef = useRef<HTMLDivElement | null>(null)
 
   const fetchStudies = async (reset = false) => {
-    if (loading) return;
-    setLoading(true);
+    if (loading) return
+    setLoading(true)
 
     try {
-      const params = new URLSearchParams();
-      if (cursor && !reset) params.append("cursor", cursor.toString());
-      if (category) params.append("category", category);
-      if (query) params.append("query", query);
+      const params = new URLSearchParams()
+      if (cursor && !reset) params.append("cursor", cursor.toString())
+      if (category) params.append("category", category)
+      if (query) params.append("query", query)
 
-      const res = await fetch(`/api/studies?${params.toString()}`);
+      const res = await fetch(`/api/studies?${params.toString()}`)
 
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        throw new Error(`HTTP error! status: ${res.status}`)
       }
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (reset) {
-        setStudies(data.posts);
+        setStudies(data.posts)
       } else {
-        setStudies((prev) => [...prev, ...data.posts]);
+        setStudies((prev) => [...prev, ...data.posts])
       }
 
-      setCursor(data.nextCursor);
-      setHasMore(data.hasMore);
+      setCursor(data.nextCursor)
+      setHasMore(data.hasMore)
     } catch (error) {
-      console.error("Failed to fetch studies:", error);
+      console.error("Failed to fetch studies:", error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  // 초기 로딩 및 카테고리/쿼리 변경 시 리셋
   useEffect(() => {
-    setStudies([]);
-    setCursor(null);
-    setHasMore(true);
-    setInitialized(false);
-    fetchStudies(true).then(() => setInitialized(true)); // 현재 커서가 null일때 (가장 처음)바로 fetch해야 한다.
-  }, [category, query]);
+    setStudies([])
+    setCursor(null)
+    setHasMore(true)
+    setInitialized(false)
+    fetchStudies(true).then(() => setInitialized(true))
+  }, [category, query])
 
-  // 무한스크롤 observer
   useEffect(() => {
-    if (!observerRef.current || !hasMore || loading || !initialized) return;
+    if (!observerRef.current || !hasMore || loading || !initialized) return
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && cursor) {
-          fetchStudies();
+          fetchStudies()
         }
       },
-      { threshold: 0.1 }
-    );
+      { threshold: 0.1 },
+    )
 
-    observer.observe(observerRef.current);
+    observer.observe(observerRef.current)
 
-    return () => observer.disconnect();
-  }, [hasMore, loading, cursor, initialized]);
+    return () => observer.disconnect()
+  }, [hasMore, loading, cursor, initialized])
 
   if (!initialized && loading) {
-    return <p>로딩 중...</p>;
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span className="ml-3 text-gray-600">로딩 중...</span>
+      </div>
+    )
   }
 
   if (initialized && studies.length === 0) {
-    return <p>등록된 글이 없습니다.</p>;
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-400 text-6xl mb-4">📚</div>
+        <p className="text-gray-500 text-lg">등록된 글이 없습니다.</p>
+      </div>
+    )
   }
 
   return (
-    <div className="grid grid-cols-3 mt-10 gap-8">
-      {studies.map((study, index) => (
-        <Link href={`/study/${study.id}`} key={study.id}>
-          <div
-            ref={index === studies.length - 1 ? observerRef : null}
-            className="flex flex-col gap-2 shadow-sm p-4 rounded-lg"
-          >
-            <p className="bg-gray-200 text-sm w-fit rounded-full text-center px-3 py-1">
-              {study.category}
-            </p>
-            <p className="text-xl font-bold mt-2">{study.title}</p>
-            <p className="line-clamp-2 text-gray-700 mt-1">
-              {study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
-            </p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-gray-900">스터디 목록</h2>
+        <span className="text-sm text-gray-500">{studies.length}개의 스터디</span>
+      </div>
 
-            <div className="flex gap-2 text-sm font-light mt-2">
-              <p>{formatRelativeTime(new Date(study.createdAt))}</p>
-              <p>{study.comments.length}개의 댓글</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {studies.map((study, index) => (
+          <Link href={`/study/${study.id}`} key={study.id}>
+            <div
+              ref={index === studies.length - 1 ? observerRef : null}
+              className="group bg-white rounded shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="space-y-4">
+                <div className="flex items-start justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200">
+                    {study.category}
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-gray-900  transition-colors line-clamp-1">
+                    {study.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                    {study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <span>{formatRelativeTime(new Date(study.createdAt))}</span>
+                  <span>•</span>
+                  <span>{study.comments.length}개의 댓글</span>
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                      <span className="text-xs text-gray-600">👤</span>
+                    </div>
+                    <span className="text-sm text-gray-700 font-medium">{study.author.nickname}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-red-500">
+                    <span className="text-sm">🖤</span>
+                    <span className="text-sm font-medium">{study.like}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between text-sm mt-2 border-t pt-3">
-              <p>
-                <span className="text-gray-400 mr-1.5">by</span>
-                {study.author.nickname}
-              </p>
-              <p className="flex gap-2.5">
-                <span>🖤 </span>
-                {study.like}
-              </p>
-            </div>
-          </div>
-        </Link>
-      ))}
-      {loading && <p className="col-span-3 text-center">로딩 중...</p>}
+          </Link>
+        ))}
+      </div>
+
+      {loading && (
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <span className="ml-3 text-gray-600">더 많은 스터디를 불러오는 중...</span>
+        </div>
+      )}
     </div>
-  );
+  )
 }

@@ -8,17 +8,24 @@ export default function CommentForm({ postId }: { postId: number }) {
   });
 
   return (
-    <form className="flex flex-col gap-4 " action={formAction}>
+    <form className="space-y-4" action={formAction}>
       <input hidden name="postId" value={postId} readOnly />
-      <textarea
-        name="content"
-        placeholder="댓글을 작성하세요."
-        rows={3}
-        className="p-5 border"
-      />
-      {formState?.error && <p className="text-red-500">{formState.error}</p>}
+      <div>
+        <textarea
+          name="content"
+          placeholder="댓글을 작성하세요."
+          rows={3}
+          className="w-full p-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder-gray-500"
+        />
+        {formState?.error && (
+          <p className="mt-2 text-sm text-red-600">{formState.error}</p>
+        )}
+      </div>
       <div className="flex justify-end">
-        <button className="px-3 py-2 rounded bg-blue-500 text-white font-semibold hover:cursor-pointer">
+        <button
+          type="submit"
+          className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
           댓글 작성
         </button>
       </div>

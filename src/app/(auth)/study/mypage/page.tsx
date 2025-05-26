@@ -19,8 +19,7 @@ export default async function MyPage() {
 
   return (
     <div className="min-h-screen  max-w-3xl  mx-auto p-10">
-      <h1>마이페이지</h1>
-      <p>{userInfo?.nickname}</p>
+      <p className="font-bold">{userInfo?.nickname}</p>
       <MyPageTabs />
       <StudyListForMyPage userId={user.id} />
     </div>
