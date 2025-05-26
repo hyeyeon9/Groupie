@@ -16,7 +16,7 @@ export default function CommentDeleteBtn({ commentId }: { commentId: number }) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="text-gray-400 "
+      className="text-gray-400 hover:cursor-pointer"
     >
       {isPending ? "삭제 중.." : "삭제"}
     </button>

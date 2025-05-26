@@ -34,11 +34,11 @@ export default function StudyList({
       if (query) params.append("query", query);
 
       const res = await fetch(`/api/studies?${params.toString()}`);
-      
+
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      
+
       const data = await res.json();
 
       if (reset) {
@@ -46,7 +46,7 @@ export default function StudyList({
       } else {
         setStudies((prev) => [...prev, ...data.posts]);
       }
-      
+
       setCursor(data.nextCursor);
       setHasMore(data.hasMore);
     } catch (error) {
@@ -62,7 +62,7 @@ export default function StudyList({
     setCursor(null);
     setHasMore(true);
     setInitialized(false);
-    fetchStudies(true).then(() => setInitialized(true)); // 현재 커서가 null일때 (가장 처음)바로 fetch해야 한다. 
+    fetchStudies(true).then(() => setInitialized(true)); // 현재 커서가 null일때 (가장 처음)바로 fetch해야 한다.
   }, [category, query]);
 
   // 무한스크롤 observer
@@ -103,7 +103,9 @@ export default function StudyList({
               {study.category}
             </p>
             <p className="text-xl font-bold mt-2">{study.title}</p>
-            <p className="text-gray-600 mt-1">{study.content}</p>
+            <p className="line-clamp-2 text-gray-700 mt-1">
+              {study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
+            </p>
 
             <div className="flex gap-2 text-sm font-light mt-2">
               <p>{formatRelativeTime(new Date(study.createdAt))}</p>

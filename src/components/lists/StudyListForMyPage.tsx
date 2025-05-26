@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import PostCard from "../PostCard";
+import PostCard from "../card/PostCard";
 
 export default async function StudyListForMyPage({
   userId,

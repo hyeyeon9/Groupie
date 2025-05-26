@@ -18,7 +18,7 @@ export default function CommentForm({ postId }: { postId: number }) {
       />
       {formState?.error && <p className="text-red-500">{formState.error}</p>}
       <div className="flex justify-end">
-        <button className="px-3 py-2 rounded bg-blue-500 text-white font-semibold">
+        <button className="px-3 py-2 rounded bg-blue-500 text-white font-semibold hover:cursor-pointer">
           댓글 작성
         </button>
       </div>

@@ -12,7 +12,11 @@ export default function DeleteButton({ postId }: { postId: number }) {
   };
 
   return (
-    <button onClick={handleDelete} disabled={isPending} className="text-gray-400 ">
+    <button
+      onClick={handleDelete}
+      disabled={isPending}
+      className="text-gray-400 hover:cursor-pointer"
+    >
       {isPending ? "삭제 중.." : "삭제"}
     </button>
   );

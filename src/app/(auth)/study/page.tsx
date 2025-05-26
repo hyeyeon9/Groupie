@@ -1,7 +1,7 @@
 import FilterButtons from "@/components/buttons/FilterButtons";
 import StudyList from "@/components/lists/StudyList";
 import SearchBar from "@/components/SearchBar";
-import Top3Card from "@/components/Top3Card";
+import Top3Card from "@/components/card/Top3Card";
 import Link from "next/link";
 
 export default function StudyHomePage({

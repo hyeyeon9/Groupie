@@ -6,6 +6,7 @@ export default async function Top3Card() {
     orderBy: { like: "desc" }, // 좋아요 순 오름차순
     take: 3, // 3개만
   });
+
   return (
     <>
       <h1 className="mb-2 font-bold text-2xl mt-5">스터디 Top3</h1>
@@ -18,7 +19,9 @@ export default async function Top3Card() {
           >
             <div>
               <p>{item.title}</p>
-              <p>{item.content}</p>
+              <p className="line-clamp-2 text-gray-700">
+                {item.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
+              </p>
               <p>❤️ {item.like}</p>
             </div>
           </Link>

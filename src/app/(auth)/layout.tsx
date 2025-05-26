@@ -23,7 +23,7 @@ export default function AuthRootLayout({
           </Link>
         </div>
         <form action={logout} className="absolute right-6">
-          <button className="px-4 py-2 bg-red-500 text-white rounded">
+          <button className="px-4 py-2 bg-red-500 text-white rounded hover:cursor-pointer">
             로그아웃
           </button>
         </form>

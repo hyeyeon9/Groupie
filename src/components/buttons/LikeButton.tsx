@@ -27,7 +27,7 @@ export default function LikeButton({
     <button
       onClick={handleClick}
       disabled={isPending}
-      className={`flex items-center gap-1 px-3 py-1 rounded-full ${
+      className={`flex items-center gap-1 px-3 py-1 rounded-full hover:cursor-pointer ${
         liked ? "text-red-500" : "text-gray-400"
       }`}
     >

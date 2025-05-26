@@ -28,7 +28,7 @@ export default function FilterButtons() {
           key={cat}
           value={cat}
           onClick={() => handleClick(cat)}
-          className={`px-3 py-2 rounded-full ${
+          className={`px-3 py-2 rounded-full hover:cursor-pointer ${
             current === cat ? "bg-black text-white" : "text-gray-500"
           }`}
         >
