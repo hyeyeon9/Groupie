@@ -23,6 +23,9 @@ export default async function StudyDetailPage({
     },
   });
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
+
   if (!post) {
     return <p className="text-center mt-10">존재하지 않는 게시글입니다.</p>;
   }
@@ -48,7 +51,7 @@ export default async function StudyDetailPage({
     <div className="flex flex-col max-w-3xl  mx-auto ">
       <ViewCounter id={post.id} />
       <div className="flex  flex-col w-full min-h-100 mt-10 p-6 shadow-sm bg-white">
-        <h1 className="text-5xl font-bold mb-4">{post.title}</h1>
+        <h1 className="text-4xl lg:text-5xl font-bold mb-4">{post.title}</h1>
         {post.author.id === user?.id && (
           <div className="flex gap-3 justify-end mb-4">
             <Link href={`/study/${post.id}/edit`}>
@@ -61,8 +64,10 @@ export default async function StudyDetailPage({
         )}
         <div className="flex justify-between">
           <div className="flex flex-col ">
-            <p className="font-bold">{post.author.nickname}</p>
-            <div className="flex gap-2 text-gray-500 ">
+            <p className="font-bold text-sm lg:text-base">
+              {post.author.nickname}
+            </p>
+            <div className="flex gap-2 text-gray-500 text-sm lg:text-base">
               <p>{formatRelativeTime(post.createdAt)}</p>
               <p> 조회수 : {post.views}</p>
             </div>
@@ -102,13 +107,13 @@ export default async function StudyDetailPage({
             <p className="font-bold">모집 여부</p>
             <p
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                post.startDate && new Date(post.startDate) < new Date()
+                post.startDate && new Date(post.startDate) < today
                   ? "bg-gray-300 text-gray-500"
                   : "bg-green-200 text-green-700"
               }`}
             >
               {" "}
-              {post.startDate && new Date(post.startDate) < new Date()
+              {post.startDate && new Date(post.startDate) < today
                 ? "모집 마감"
                 : "모집중"}
             </p>
@@ -118,7 +123,7 @@ export default async function StudyDetailPage({
           <MarkdownPreview content={post.content} />
         </div>
       </div>
-      <div className="mt-10 w-full px-5 lg:p-0">
+      <div className="mt-10 w-full px-5 lg:p-0 pb-20 ">
         <CommentList postId={post.id} />
       </div>
     </div>
