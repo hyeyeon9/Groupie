@@ -4,14 +4,12 @@ import SearchBar from "@/components/SearchBar";
 import Top3Card from "@/components/card/Top3Card";
 import Link from "next/link";
 
-export default function StudyHomePage({
-  searchParams,
-}: {
-  searchParams?: { category?: string; query?: string };
-}) {
+export default function StudyHomePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="space-y-8">
+        {/* Top3 카드 섹션 */}
+        <Top3Card />
         {/* 검색 및 스터디 모집 섹션 */}
         <div>
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -31,14 +29,8 @@ export default function StudyHomePage({
           </div>
         </div>
 
-        {/* Top3 카드 섹션 */}
-        <Top3Card />
-
         {/* 스터디 목록 섹션 */}
-        <StudyList
-          category={searchParams?.category}
-          query={searchParams?.query}
-        />
+        <StudyList />
       </div>
     </div>
   );

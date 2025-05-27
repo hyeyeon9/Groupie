@@ -8,25 +8,45 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const cursorParam = searchParams.get("cursor");
     const cursor = cursorParam ? Number(cursorParam) : null;
-    const category = searchParams.get("category");
+
+    const category = searchParams.get("category"); // 코딩
+    const studyType = searchParams.get("studyType"); // 온라인
+    const status = searchParams.get("status"); // open
     const query = searchParams.get("query");
+
     const take = 6;
 
-    console.log("API params:", { cursor, category, query });
+    console.log("타입", studyType);
+    console.log("category", category);
+    console.log("status", status);
 
     // where 조건 구성 - TypeScript가 Prisma가 기대하는 필드만 허용
-    const where: Prisma.StudyWhereInput = {};
+    const andConditions: Prisma.StudyWhereInput[] = [];
 
     if (category && category !== "전체" && category !== "null") {
-      where.category = category;
+      andConditions.push({ category });
+    }
+
+    if (studyType && studyType !== "전체" && studyType !== "null") {
+      andConditions.push({ studyType: studyType.trim() });
+    }
+
+    if (status === "open") {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      andConditions.push({ startDate: { gte: today } });
+      andConditions.push({ startDate: { not: null } });
     }
 
     if (query && query !== "null") {
-      where.OR = [
-        { title: { contains: query } },
-        { content: { contains: query } },
-      ];
+      andConditions.push({
+        OR: [{ title: { contains: query } }, { content: { contains: query } }],
+      });
     }
+
+    const where: Prisma.StudyWhereInput = andConditions.length
+      ? { AND: andConditions }
+      : {};
 
     const studies = await prisma.study.findMany({
       where,

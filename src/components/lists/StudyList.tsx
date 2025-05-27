@@ -2,6 +2,7 @@
 import { formatRelativeTime } from "@/lib/date";
 import type { Comment, Study, User } from "@prisma/client";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type StudyType = Study & {
@@ -9,19 +10,22 @@ type StudyType = Study & {
   comments: Comment[];
 };
 
-export default function StudyList({
-  category,
-  query,
-}: {
-  category?: string;
-  query?: string;
-}) {
+export default function StudyList() {
   const [studies, setStudies] = useState<StudyType[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const searchParams = useSearchParams();
+  const studyType = searchParams.get("studyType");
+  const category = searchParams.get("category");
+  const query = searchParams.get("query");
+  const status = searchParams.get("status");
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
 
   const fetchStudies = async (reset = false) => {
     if (loading) return;
@@ -32,6 +36,10 @@ export default function StudyList({
       if (cursor && !reset) params.append("cursor", cursor.toString());
       if (category) params.append("category", category);
       if (query) params.append("query", query);
+      if (studyType) params.append("studyType", studyType);
+      if (status) params.append("status", status);
+
+      console.log("parmas", status, studyType, category);
 
       const res = await fetch(`/api/studies?${params.toString()}`);
 
@@ -62,7 +70,7 @@ export default function StudyList({
     setHasMore(true);
     setInitialized(false);
     fetchStudies(true).then(() => setInitialized(true));
-  }, [category, query]);
+  }, [category, query, studyType, status]);
 
   useEffect(() => {
     if (!observerRef.current || !hasMore || loading || !initialized) return;
@@ -122,12 +130,12 @@ export default function StudyList({
                   </span>
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      study.startDate && new Date(study.startDate) < new Date()
+                      study.startDate && new Date(study.startDate) < today
                         ? "bg-gray-300 text-gray-500"
                         : "bg-green-200 text-green-700"
                     }`}
                   >
-                    {study.startDate && new Date(study.startDate) < new Date()
+                    {study.startDate && new Date(study.startDate) < today
                       ? "모집 마감"
                       : "모집중"}
                   </span>
