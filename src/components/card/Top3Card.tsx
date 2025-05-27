@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
+import PopularStudySlider from "../PopularStudySlider";
 
 export default async function Top3Card() {
   const top3 = await prisma.study.findMany({
     orderBy: { like: "desc" },
-    take: 3,
+    take: 10,
   });
 
   const today = new Date();
@@ -15,7 +15,10 @@ export default async function Top3Card() {
       <div className="flex mb-6">
         <h2 className="text-2xl font-bold text-gray-900">🔥 인기많은 스터디</h2>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div>
+        <PopularStudySlider posts={top3} />
+      </div>
+      {/* <div className="hidden lg:grid grid-cols-3 gap-4">
         {top3.map((item) => (
           <Link
             href={`/study/${item.id}`}
@@ -59,7 +62,7 @@ export default async function Top3Card() {
             </div>
           </Link>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

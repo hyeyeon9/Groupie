@@ -35,7 +35,7 @@ export default function AuthRootLayout({
           </div>
         </div>
       </header>
-      <main className="min-h-screen">{children}</main>
+      <main className="min-h-screen ">{children}</main>
     </>
   );
 }

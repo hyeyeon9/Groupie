@@ -145,7 +145,10 @@ export default function StudyList() {
                   <h3 className="text-lg font-semibold text-gray-900  transition-colors line-clamp-1">
                     {study.title}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                  <p
+                    className="text-sm text-gray-600 line-clamp-2 leading-relaxed
+                  min-h-[48px]"
+                  >
                     {study.content
                       .replace(/[#_*~`>[\]()\-!\n]/g, "")
                       .slice(0, 100)}
