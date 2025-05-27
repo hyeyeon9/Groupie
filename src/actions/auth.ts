@@ -87,7 +87,7 @@ export async function login(prevState: FormState, formData: FormData) {
   if (!isValidPassword) {
     return {
       errors: {
-        password: "자격 증명을 확인해주세요.",
+        password: "비밀번호를 다시 확인해주세요.",
       },
     };
   }
