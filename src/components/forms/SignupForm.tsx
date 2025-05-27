@@ -1,73 +1,142 @@
 "use client";
-import { FormState, signup } from "@/actions/auth";
+import { type FormState, signup } from "@/actions/auth";
 import Link from "next/link";
 import { useActionState } from "react";
+import { User, Lock, UserPlus, ArrowLeft, Hash } from "lucide-react";
 
 export default function SignupForm() {
   const [formState, formAction] = useActionState<FormState, FormData>(signup, {
     errors: {},
   });
-  return (
-    <form action={formAction} className="flex flex-col gap-3">
-      <div className="flex flex-col">
-        <label htmlFor="id" className="font-bold mb-2">
-          아이디
-        </label>
-        <input
-          type="text"
-          name="id"
-          placeholder="아이디를 입력하세요."
-          id="id"
-          className="border-1 border-gray-300 py-2 px-4 rounded"
-        />
-      </div>
-      {formState?.errors?.id && (
-        <p className="text-red-500">{formState.errors.id}</p>
-      )}
-      <div className="flex flex-col mt-2">
-        <label htmlFor="password" className="font-bold mb-2">
-          비밀번호
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="비밀번호를 입력하세요."
-          className="border-1 border-gray-300 py-2 px-4 rounded"
-        />
-      </div>
-      {formState?.errors?.password && (
-        <p className="text-red-500">{formState.errors.password}</p>
-      )}
-      <div className="flex flex-col mt-2">
-        <label htmlFor="nickname" className="font-bold mb-2">
-          닉네임
-        </label>
-        <input
-          type="text"
-          name="nickname"
-          placeholder="닉네임을 입력하세요."
-          className="border-1 border-gray-300 py-2 px-4 rounded"
-          id="nickname"
-        />
-      </div>
-      {formState?.errors?.nickname && (
-        <p className="text-red-500">{formState.errors.nickname}</p>
-      )}
 
-      <button
-        type="submit"
-        className=" bg-blue-500 px-3 py-2 rounded mt-5 hover:cursor-pointer"
-      >
-        회원가입
-      </button>
-      <div className="absolute hover:cursor-pointer">
-        <p>
-          <Link href="/?mode=login">
-            <span className="font-bold ">🔙</span>
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        {/* 뒤로가기 버튼 */}
+        <div className="mb-6">
+          <Link
+            href="/?mode=login"
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            로그인
           </Link>
-        </p>
+        </div>
+
+        {/* 헤더 */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">회원가입</h1>
+          <p className="text-gray-600">새 계정을 만들어 스터디에 참여하세요</p>
+        </div>
+
+        {/* 폼 */}
+        <form action={formAction} className="space-y-6">
+          {/* 아이디 입력 */}
+          <div className="space-y-2">
+            <label
+              htmlFor="id"
+              className="block text-sm font-medium text-gray-700"
+            >
+              아이디
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                name="id"
+                id="id"
+                placeholder="아이디를 입력하세요"
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors ${
+                  formState?.errors?.id
+                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </div>
+            {formState?.errors?.id && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-4 h-4">⚠️</span>
+                {formState.errors.id}
+              </p>
+            )}
+          </div>
+
+          {/* 비밀번호 입력 */}
+          <div className="space-y-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              비밀번호
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="비밀번호를 입력하세요"
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors ${
+                  formState?.errors?.password
+                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </div>
+            {formState?.errors?.password && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-4 h-4">⚠️</span>
+                {formState.errors.password}
+              </p>
+            )}
+          </div>
+
+          {/* 닉네임 입력 */}
+          <div className="space-y-2">
+            <label
+              htmlFor="nickname"
+              className="block text-sm font-medium text-gray-700"
+            >
+              닉네임
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Hash className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                name="nickname"
+                id="nickname"
+                placeholder="닉네임을 입력하세요"
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors ${
+                  formState?.errors?.nickname
+                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </div>
+            {formState?.errors?.nickname && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-4 h-4">⚠️</span>
+                {formState.errors.nickname}
+              </p>
+            )}
+          </div>
+
+          {/* 회원가입 버튼 */}
+          <button
+            type="submit"
+            className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <UserPlus className="w-4 h-4" />
+            회원가입
+          </button>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
