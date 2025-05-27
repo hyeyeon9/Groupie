@@ -62,7 +62,7 @@ model Like {
   studyId Int
 
   user  User  @relation(fields: [userId], references: [id])
-  study Study @relation(fields: [studyId], references: [id])
+  study Study @relation(fields: [studyId], references: [id], onDelete : Cascade)
 
   @@unique([userId, studyId]) // 유저당 한 게시글에 하나씩 
 }
@@ -75,7 +75,7 @@ model Comment {
   updatedAt DateTime? @updatedAt 
 
   studyId Int
-  study   Study @relation(fields: [studyId], references: [id])
+  study   Study @relation(fields: [studyId], references: [id], onDelete: Cascade)
 
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
