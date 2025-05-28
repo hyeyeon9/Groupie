@@ -1,25 +1,26 @@
 "use client";
 import { toggleLike } from "@/actions/study-actions";
 import { useState, useTransition } from "react";
+import { FaBookmark } from "react-icons/fa";
 
-export default function LikeButton({
+export default function ScrapButton({
   studyId,
-  initialLikeCount,
-  initiallyLiked,
+  initialScrapCount,
+  initiallyScraped,
 }: {
   studyId: number;
-  initialLikeCount: number;
-  initiallyLiked: boolean;
+  initialScrapCount: number;
+  initiallyScraped: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
-  const [liked, setLiked] = useState(initiallyLiked ?? false);
-  const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const [liked, setLiked] = useState(initiallyScraped ?? false);
+  const [scrapCount, setScrapCount] = useState(initialScrapCount);
 
   const handleClick = () => {
     startTransition(async () => {
       const res = await toggleLike(studyId);
       setLiked(!!res.liked);
-      setLikeCount((prev) => prev + (res.liked ? 1 : -1));
+      setScrapCount((prev) => prev + (res.liked ? 1 : -1));
     });
   };
 
@@ -31,8 +32,11 @@ export default function LikeButton({
         liked ? "text-red-500" : "text-gray-400"
       }`}
     >
-      <span>❤️</span>
-      <span>{likeCount}</span>
+      <span>
+        {" "}
+        <FaBookmark />
+      </span>
+      <span>{scrapCount}</span>
     </button>
   );
 }

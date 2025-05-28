@@ -1,5 +1,4 @@
 import DeleteButton from "@/components/buttons/PostDeleteButtonDeleteBtn";
-import LikeButton from "@/components/buttons/LikeButton";
 import CommentList from "@/components/comments/CommentList";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -7,6 +6,8 @@ import Link from "next/link";
 import ViewCounter from "@/components/ViewCounter";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { formatRelativeTime } from "@/lib/date";
+import Image from "next/image";
+import ScrapButton from "@/components/buttons/ScrapButton";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -32,10 +33,10 @@ export default async function StudyDetailPage({
 
   const { user } = await verifyAuth();
 
-  let initiallyLiked = false;
+  let initiallyScraped = false;
 
   if (user) {
-    const existingLike = await prisma.like.findUnique({
+    const existingScrap = await prisma.scrap.findUnique({
       where: {
         userId_studyId: {
           userId: user.id,
@@ -44,7 +45,7 @@ export default async function StudyDetailPage({
       },
     });
 
-    initiallyLiked = !!existingLike; // !!은 값을 boolean으로 강제 변환하는 표현
+    initiallyScraped = !!existingScrap; // !!은 값을 boolean으로 강제 변환하는 표현
   }
 
   return (
@@ -63,20 +64,30 @@ export default async function StudyDetailPage({
           </div>
         )}
         <div className="flex justify-between">
-          <div className="flex flex-col ">
-            <p className="font-bold text-sm lg:text-base">
-              {post.author.nickname}
-            </p>
-            <div className="flex gap-2 text-gray-500 text-sm lg:text-base">
-              <p>{formatRelativeTime(post.createdAt)}</p>
-              <p> 조회수 : {post.views}</p>
+          <div className="flex gap-3 items-center">
+            <div className="w-8 h-8 rounded-full  overflow-hidden relative">
+              <Image
+                src={post.author.profileImage ?? "/default-avatar.png"}
+                alt="프로필 사진"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col ">
+              <p className="font-bold text-sm lg:text-base">
+                {post.author.nickname}
+              </p>
+              <div className="flex gap-2 text-gray-500 text-sm lg:text-base">
+                <p>{formatRelativeTime(post.createdAt)}</p>
+                <p> 조회수 : {post.views}</p>
+              </div>
             </div>
           </div>
 
-          <LikeButton
+          <ScrapButton
             studyId={post.id}
-            initialLikeCount={post.like}
-            initiallyLiked={initiallyLiked}
+            initialScrapCount={post.scrap}
+            initiallyScraped={initiallyScraped}
           />
         </div>
 
@@ -101,7 +112,7 @@ export default async function StudyDetailPage({
           </div>
           <div className="flex gap-5">
             <p className="font-bold">연락 방법</p>
-            <p>{post.contactLink}</p>
+            <p>{post.contactMethod}</p>
           </div>
           <div className="flex gap-5">
             <p className="font-bold">모집 여부</p>

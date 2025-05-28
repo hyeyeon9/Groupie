@@ -31,7 +31,7 @@ export default function EditForm({ post }: { post: Study }) {
               id="category"
               name="category"
               defaultValue={post.category}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+              className="w-full pr-2  px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
             >
               <option value="코딩">💻 코딩</option>
               <option value="어학">🌍 어학</option>

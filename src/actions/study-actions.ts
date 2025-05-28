@@ -116,7 +116,7 @@ export async function toggleLike(studyId: number) {
     };
   }
 
-  const existing = await prisma.like.findUnique({
+  const existing = await prisma.scrap.findUnique({
     where: {
       userId_studyId: {
         userId: user.id,
@@ -127,7 +127,7 @@ export async function toggleLike(studyId: number) {
 
   if (existing) {
     // 좋아요가 있는 경우
-    await prisma.like.delete({
+    await prisma.scrap.delete({
       where: {
         userId_studyId: {
           userId: user.id,
@@ -140,11 +140,11 @@ export async function toggleLike(studyId: number) {
       where: {
         id: studyId,
       },
-      data: { like: { decrement: 1 } },
+      data: { scrap: { decrement: 1 } },
     });
     return { liked: false };
   } else {
-    await prisma.like.create({
+    await prisma.scrap.create({
       data: {
         userId: user.id,
         studyId,
@@ -153,7 +153,7 @@ export async function toggleLike(studyId: number) {
 
     await prisma.study.update({
       where: { id: studyId },
-      data: { like: { increment: 1 } },
+      data: { scrap: { increment: 1 } },
     });
 
     return { liked: true };

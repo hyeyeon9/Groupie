@@ -1,5 +1,6 @@
 import { formatRelativeTime } from "@/lib/date";
 import Link from "next/link";
+import { FaBookmark } from "react-icons/fa";
 
 type Props = {
   post: {
@@ -7,7 +8,7 @@ type Props = {
     title: string;
     content: string;
     category: string;
-    like: number;
+    scrap: number;
     createdAt: Date;
     authorId?: number;
     startDate?: Date | null;
@@ -43,7 +44,11 @@ export default function PostCard({ post }: Props) {
             )}
           </div>
           <div className="flex items-center gap-1 text-sm text-gray-500">
-            <span className="font-medium">♥︎ {post.like}</span>
+            <div className="font-medium flex gap-1 items-center">
+              {" "}
+              <FaBookmark />
+              {post.scrap}
+            </div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import { Study } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaBookmark } from "react-icons/fa";
 import Slider from "react-slick";
 
 export default function PopularStudySlider({ posts }: { posts: Study[] }) {
@@ -53,20 +54,9 @@ export default function PopularStudySlider({ posts }: { posts: Study[] }) {
           key={item.id}
           className=" flex flex-col justify-between h-full px-2"
         >
-          <div className="border border-gray-200 rounded p-5 shadow-sm ">
-            <div className="space-y-2 ">
-              <h3
-                onClick={() => router.push(`/study/${item.id}`)}
-                className="font-semibold text-gray-900 line-clamp-1 hover:cursor-pointer hover:text-blue-500 transition-colors duration-200"
-              >
-                {item.title}
-              </h3>
-              <p className="text-sm text-gray-600 line-clamp-2 min-h-[48px]">
-                {item.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
-              </p>
-            </div>
-            <div className="flex justify-between mt-2">
-              <div className="flex gap-2">
+          <div className="border border-gray-200 rounded-xl p-5 shadow-sm ">
+            <div className="space-y-3">
+              <div className="flex gap-2 -ml-1">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                   {item.category}
                 </span>
@@ -83,9 +73,20 @@ export default function PopularStudySlider({ posts }: { posts: Study[] }) {
                     : "모집중"}
                 </p>
               </div>
+              <h3
+                onClick={() => router.push(`/study/${item.id}`)}
+                className="font-semibold text-gray-900 line-clamp-1 hover:cursor-pointer hover:text-blue-500 transition-colors duration-200"
+              >
+                {item.title}
+              </h3>
+            </div>
+            <div className="flex justify-end mt-2 gap-2 text-sm">
+              <span>👀 {item.views}</span>
               <div className="flex items-center gap-1 text-red-500">
-                <span>❤️</span>
-                <span className="text-sm font-medium">{item.like}</span>
+                <span>
+                  <FaBookmark />
+                </span>
+                <span className="text-sm font-medium">{item.scrap}</span>
               </div>
             </div>
           </div>

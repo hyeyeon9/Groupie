@@ -1,9 +1,11 @@
 "use client";
 import { formatRelativeTime } from "@/lib/date";
 import type { Comment, Study, User } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { FaBookmark } from "react-icons/fa";
 
 type StudyType = Study & {
   author: User;
@@ -162,17 +164,29 @@ export default function StudyList() {
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
-                      <span className="text-xs text-gray-600">👤</span>
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                        <Image
+                          src={
+                            study.author.profileImage ?? "/default-avatar.png"
+                          }
+                          alt="프로필"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
-                    <span className="text-sm text-gray-700 font-medium">
+                    <span className="text-sm text-gray-700 font-medium ">
                       {study.author.nickname}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 text-red-500">
-                    <span className="text-sm">🖤</span>
-                    <span className="text-sm font-medium">{study.like}</span>
+                  <div className="flex items-center gap-1 text-red-500">
+                    <span className="text-sm">
+                      {" "}
+                      <FaBookmark />
+                    </span>
+                    <span className="text-sm font-medium">{study.scrap}</span>
                   </div>
                 </div>
               </div>
