@@ -1,8 +1,7 @@
 "use client";
 import { type FormState, signup } from "@/actions/auth";
-import Link from "next/link";
 import { useActionState } from "react";
-import { User, Lock, UserPlus, ArrowLeft, Hash } from "lucide-react";
+import { User, Lock, UserPlus, Hash } from "lucide-react";
 
 export default function SignupForm() {
   const [formState, formAction] = useActionState<FormState, FormData>(signup, {
@@ -12,17 +11,6 @@ export default function SignupForm() {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-        {/* 뒤로가기 버튼 */}
-        <div className="mb-6">
-          <Link
-            href="/?mode=login"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            로그인
-          </Link>
-        </div>
-
         {/* 헤더 */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">회원가입</h1>

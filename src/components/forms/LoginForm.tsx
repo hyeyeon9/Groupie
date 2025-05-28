@@ -1,14 +1,23 @@
 "use client";
 import { type FormState, login } from "@/actions/auth";
-import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { User, Lock, LogIn } from "lucide-react";
+import { useModalStore } from "@/store/modalStore";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [formState, formAction] = useActionState<FormState, FormData>(login, {
     errors: {},
   });
+  const { close } = useModalStore();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (formState.success) {
+      close(); // 모달 닫고
+      router.refresh(); // 현재 페이지를 서버에서 다시 fetch해서 새로고침
+    }
+  }, [formState, close, router]);
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
@@ -93,19 +102,6 @@ export default function LoginForm() {
             로그인
           </button>
         </form>
-
-        {/* 회원가입 링크 */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
-            계정이 없으신가요?{" "}
-            <Link
-              href="/?mode=signup"
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-            >
-              회원가입
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

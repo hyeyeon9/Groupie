@@ -1,9 +1,23 @@
 "use client";
+import { useModalStore } from "@/store/modalStore";
 import { Study } from "@prisma/client";
 import toast from "react-hot-toast";
 
-export default function ApplyButton({ post }: { post: Study }) {
+export default function ApplyButton({
+  post,
+  isLoggedIn,
+}: {
+  post: Study;
+  isLoggedIn: boolean;
+}) {
+  const { open } = useModalStore();
+
   const handleApply = () => {
+    if (!isLoggedIn) {
+      open("login");
+      return;
+    }
+
     if (post.contactMethod === "이메일") {
       navigator.clipboard.writeText(post.contactLink ?? "null");
       toast.success("클립보드에 이메일을 복사했어요!");
