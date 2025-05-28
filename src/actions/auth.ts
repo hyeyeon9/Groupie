@@ -50,6 +50,8 @@ export async function signup(prevState: FormState, formData: FormData) {
         userId,
         password: hashedPassword,
         nickname,
+        profileImage:
+          "https://avatarimage2.s3.ap-northeast-2.amazonaws.com/avatars/ChatGPTImage.png",
       },
     });
 
