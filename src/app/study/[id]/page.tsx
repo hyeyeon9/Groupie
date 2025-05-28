@@ -64,7 +64,7 @@ export default async function StudyDetailPage({
             <DeleteButton postId={post.id} />
           </div>
         ) : (
-          <ApplyButton post={post}/>
+          <ApplyButton post={post} isLoggedIn={!!user?.id} />
         )}
 
         <div className="flex justify-between">
@@ -92,6 +92,7 @@ export default async function StudyDetailPage({
             studyId={post.id}
             initialScrapCount={post.scrap}
             initiallyScraped={initiallyScraped}
+            isLoggedIn={!!user?.id}
           />
         </div>
 
