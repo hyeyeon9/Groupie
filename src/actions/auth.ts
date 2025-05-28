@@ -12,6 +12,7 @@ export type FormState = {
     password?: string;
     nickname?: string;
   };
+  success?: boolean;
 };
 
 export async function signup(prevState: FormState, formData: FormData) {
@@ -96,7 +97,9 @@ export async function login(prevState: FormState, formData: FormData) {
 
   // 루시아를 통해 세션 만들기
   await createAuthSession(existingUser.id);
-  redirect("/study");
+  return {
+    success: true,
+  };
 }
 
 export async function logout() {
