@@ -8,6 +8,7 @@ import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { formatRelativeTime } from "@/lib/date";
 import Image from "next/image";
 import ScrapButton from "@/components/buttons/ScrapButton";
+import ApplyButton from "@/components/buttons/ApplyButton";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -53,7 +54,7 @@ export default async function StudyDetailPage({
       <ViewCounter id={post.id} />
       <div className="flex  flex-col w-full min-h-100 mt-10 p-6 shadow-sm bg-white">
         <h1 className="text-4xl lg:text-5xl font-bold mb-4">{post.title}</h1>
-        {post.author.id === user?.id && (
+        {post.author.id === user?.id ? (
           <div className="flex gap-3 justify-end mb-4">
             <Link href={`/study/${post.id}/edit`}>
               <button className="text-gray-400 hover:cursor-pointer">
@@ -62,7 +63,10 @@ export default async function StudyDetailPage({
             </Link>
             <DeleteButton postId={post.id} />
           </div>
+        ) : (
+          <ApplyButton post={post}/>
         )}
+
         <div className="flex justify-between">
           <div className="flex gap-3 items-center">
             <div className="w-8 h-8 rounded-full  overflow-hidden relative">

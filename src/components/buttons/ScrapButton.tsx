@@ -1,6 +1,7 @@
 "use client";
 import { toggleLike } from "@/actions/study-actions";
 import { useState, useTransition } from "react";
+import toast from "react-hot-toast";
 import { FaBookmark } from "react-icons/fa";
 
 export default function ScrapButton({
@@ -20,6 +21,11 @@ export default function ScrapButton({
     startTransition(async () => {
       const res = await toggleLike(studyId);
       setLiked(!!res.liked);
+      if (liked) {
+        toast.success("스크랩 제거!");
+      }else{
+         toast.success("스크랩 완료!");
+      }
       setScrapCount((prev) => prev + (res.liked ? 1 : -1));
     });
   };

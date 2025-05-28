@@ -9,9 +9,9 @@ export default function MyPageTabs() {
     <div className="mb-8">
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
-          <Link href="/study/mypage" className="group">
+          <Link href="/study/mypage" className="group ">
             <button
-              className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors hover:cursor-pointer ${
                 pathname === "/study/mypage"
                   ? "border-blue-500 text-blue-600"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -20,9 +20,9 @@ export default function MyPageTabs() {
               내가 쓴 글
             </button>
           </Link>
-          <Link href="/study/mypage/likes" className="group">
+          <Link href="/study/mypage/likes" className="group ">
             <button
-              className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors hover:cursor-pointer ${
                 pathname === "/study/mypage/likes"
                   ? "border-blue-500 text-blue-600"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"

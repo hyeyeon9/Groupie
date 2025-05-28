@@ -20,7 +20,7 @@ export default async function LikesPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">마이페이지</h1>
         <p className="text-gray-600">
-          내가 작성한 글과 좋아요한 글을 관리하세요
+          내가 작성한 글과 스크랩한 글을 관리하세요
         </p>
       </div>
 
