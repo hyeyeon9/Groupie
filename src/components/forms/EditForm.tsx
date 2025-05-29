@@ -124,7 +124,7 @@ export default function EditForm({ post }: { post: Study }) {
               type="text"
               defaultValue={post.contactLink ?? ""}
               placeholder="연락 링크를 입력해주세요"
-              className="mt-6 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+              className=" lg:mt-6 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
             />
           </div>
         </div>
@@ -178,12 +178,23 @@ export default function EditForm({ post }: { post: Study }) {
           </div>
         )}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="hover:cursor-pointer inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            등록하기
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setContent(post.content);
+              }}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+            >
+              초기화
+            </button>
+            <button
+              type="submit"
+              className="hover:cursor-pointer inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              등록하기
+            </button>
+          </div>
         </div>
       </form>
     </>

@@ -11,10 +11,11 @@ import {
   quote,
   codeBlock,
   link,
-  image,
   unorderedListCommand,
   title,
   hr,
+  orderedListCommand,
+  checkedListCommand,
 } from "@uiw/react-md-editor";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
@@ -37,9 +38,22 @@ export default function PostEditor({
     quote,
     codeBlock,
     link,
-    image,
     unorderedListCommand,
     hr,
+  ];
+
+    const defaultCommands = [
+    title,
+    bold,
+    italic,
+    strikethrough,
+    quote,
+    codeBlock,
+    link,
+    unorderedListCommand,
+    hr,
+    orderedListCommand,
+    checkedListCommand
   ];
 
   return (
@@ -48,7 +62,7 @@ export default function PostEditor({
         value={value}
         onChange={onChange}
         preview="edit"
-        commands={isMobile ? essentialCommands : undefined}
+        commands={isMobile ? essentialCommands : defaultCommands}
         extraCommands={isMobile ? [] : undefined}
         textareaProps={{
           placeholder:
