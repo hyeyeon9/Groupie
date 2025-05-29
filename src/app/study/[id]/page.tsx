@@ -11,15 +11,17 @@ import ApplyButton from "@/components/ui/buttons/ApplyButton";
 import StudyDeleteButton from "@/components/ui/buttons/StudyDeleteButton";
 
 type StudyDetailPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function StudyDetailPage({
   params,
 }: StudyDetailPageProps) {
-  const id = Number(params?.id);
+  const { id } = await params;
+  const numberId = Number(id);
+
   const post = await prisma.study.findUnique({
-    where: { id: id },
+    where: { id: numberId },
     include: {
       author: true,
     },
