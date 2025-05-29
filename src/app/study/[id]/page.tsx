@@ -135,7 +135,26 @@ export default async function StudyDetailPage({
             </p>
           </div>
         </div>
-        <div className="prose max-w-none py-8">
+        <div className="prose max-w-none py-6 lg:py-8 lg:px-2">
+          {/* 썸네일 이미지 */}
+          <div className=" w-full flex justify-center ">
+            {post.image && (
+              <div
+                className="mb-6 flex justify-center w-[320px] h-[200px] 
+            lg:w-full lg:h-[400px]"
+              >
+                <Image
+                  src={post.image}
+                  alt="썸네일"
+                  width={800}
+                  height={500}
+                  className="w-full h-auto object-cover rounded"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 마크다운 내용 */}
           <MarkdownPreview content={post.content} />
         </div>
       </div>

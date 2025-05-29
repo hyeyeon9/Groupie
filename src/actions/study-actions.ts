@@ -25,6 +25,7 @@ export async function createStudy(prevState: FormState, formData: FormData) {
   const startDate = startDateStr ? new Date(startDateStr) : undefined;
   const contactMethod = formData.get("contactMethod") as string;
   const contactLink = formData.get("contactLink") as string;
+  const image = formData.get("image") as string;
 
   if (!title || !content) {
     return {
@@ -43,6 +44,7 @@ export async function createStudy(prevState: FormState, formData: FormData) {
       startDate,
       contactMethod,
       contactLink,
+      image,
     },
   });
 
@@ -68,6 +70,7 @@ export async function updateStudy(prevState: FormState, formData: FormData) {
   const startDate = startDateStr ? new Date(startDateStr) : undefined;
   const contactMethod = formData.get("contactMethod") as string;
   const contactLink = formData.get("contactLink") as string;
+  const image = formData.get("image") as string;
 
   if (!title || !content) {
     return {
@@ -86,6 +89,7 @@ export async function updateStudy(prevState: FormState, formData: FormData) {
       startDate,
       contactMethod,
       contactLink,
+      image,
     },
   });
 

@@ -14,10 +14,11 @@ const s3 = new S3Client({
 export async function POST(req: Request) {
   const formData = await req.formData();
   const file = formData.get("file") as File;
+  const type = formData.get("type") as string;
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const key = `avatars/${randomUUID()}-${file.name}`;
+  const key = `${type}/${randomUUID()}-${file.name}`;
 
   await s3.send(
     new PutObjectCommand({

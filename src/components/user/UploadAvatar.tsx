@@ -23,6 +23,7 @@ export default function UploadAvatar({
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("type", "avatars");
 
     const res = await fetch("/api/upload", {
       method: "POST",

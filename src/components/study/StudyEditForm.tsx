@@ -3,6 +3,7 @@ import { updateStudy } from "@/actions/study-actions";
 import { Study } from "@prisma/client";
 import { useActionState, useEffect, useState } from "react";
 import PostEditor from "../markdown/MarkdownEditor";
+import Image from "next/image";
 
 export default function EditForm({ post }: { post: Study }) {
   const [formState, formAction] = useActionState(updateStudy, {
@@ -10,10 +11,31 @@ export default function EditForm({ post }: { post: Study }) {
   });
   const [content, setContent] = useState("");
 
+  const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState("");
+
   useEffect(() => {
     setContent(post.content);
   }, [post.content]);
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setPreview(URL.createObjectURL(file));
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", "posts");
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    setFile(data.url);
+  };
   return (
     <>
       <form className="space-y-6" action={formAction}>
@@ -144,6 +166,55 @@ export default function EditForm({ post }: { post: Study }) {
             type="text"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="file">썸네일</label>
+
+          {/* 커스텀 파일 업로드 버튼 */}
+          <div className="flex gap-2">
+            <label
+              htmlFor="file"
+              className="inline-block px-2 py-1 text-xs font-medium text-white bg-black rounded cursor-pointer w-fit"
+            >
+              파일 선택
+            </label>
+
+            <button
+              type="button"
+              onClick={() => {
+                setFile(post.image || "");
+                setPreview(post.image);
+              }}
+              className="inline-block px-2 py-1 text-xs font-medium text-white bg-black rounded cursor-pointer w-fit"
+            >
+              초기화
+            </button>
+          </div>
+
+          {/* 실제 input은 숨김 */}
+          <input
+            id="file"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+
+          {/* 미리보기 */}
+          {(preview || post.image) && (
+            <div className="relative w-48 h-48 mb-3">
+              <Image
+                src={preview ?? post.image!}
+                alt="썸네일"
+                fill
+                className="object-cover rounded-lg border"
+              />
+            </div>
+          )}
+
+          {/* 서버 전송용 hidden input */}
+          <input type="hidden" name="image" value={file} />
         </div>
         {/* 내용 작성 */}
         <div className="border border-gray-300 rounded-lg overflow-hidden">
