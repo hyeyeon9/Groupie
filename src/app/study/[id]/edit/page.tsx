@@ -1,4 +1,4 @@
-import EditForm from "@/components/forms/EditForm";
+import EditForm from "@/components/study/StudyEditForm";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";

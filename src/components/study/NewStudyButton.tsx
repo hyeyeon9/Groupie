@@ -3,7 +3,7 @@
 import { useModalStore } from "@/store/modalStore";
 import { useRouter } from "next/navigation";
 
-export default function StudyAddButton({
+export default function NewStudyButton({
   isLoggedIn,
 }: {
   isLoggedIn: boolean;

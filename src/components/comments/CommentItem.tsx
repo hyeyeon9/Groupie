@@ -1,9 +1,10 @@
 "use client";
 import { User } from "@prisma/client";
-import CommentDeleteBtn from "../buttons/CommentDeleteBtn";
+
 import { useState, useTransition } from "react";
 import { updateComment } from "@/actions/comments-actions";
 import { formatRelativeTime } from "@/lib/date";
+import CommentDeleteButton from "./CommentDeleteButton";
 
 type Props = {
   comment: {
@@ -61,7 +62,7 @@ export default function CommentItem({
                 수정
               </button>
             )}
-            <CommentDeleteBtn commentId={comment.id} />
+            <CommentDeleteButton commentId={comment.id} />
           </div>
         )}
       </div>

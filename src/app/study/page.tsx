@@ -1,10 +1,10 @@
-import FilterButtons from "@/components/buttons/FilterButtons";
-import StudyList from "@/components/lists/StudyList";
-import SearchBar from "@/components/SearchBar";
+import StudyFilterButtons from "@/components/study/filters/StudyFilterButtons";
+import StudyList from "@/components/study/StudyList";
+import SearchBar from "@/components/study/filters/SearchBar";
 
-import StudyAddButton from "@/components/buttons/StudyAddButton";
+import NewStudyButton from "@/components/study/NewStudyButton";
 import { verifyAuth } from "@/lib/auth";
-import Top3Card from "@/components/card/Top3Card";
+import TopStudyCard from "@/components/ui/card/TopStudyCard";
 
 export default async function StudyHomePage() {
   const { user } = await verifyAuth();
@@ -13,7 +13,7 @@ export default async function StudyHomePage() {
       <div className="space-y-8">
         {/* Top3 카드 섹션 */}
 
-        <Top3Card />
+        <TopStudyCard />
 
         {/* 검색 및 스터디 모집 섹션 */}
         <div>
@@ -21,10 +21,10 @@ export default async function StudyHomePage() {
             <div className="flex-1 w-full sm:max-w-md ">
               <SearchBar />
             </div>
-            <StudyAddButton isLoggedIn={!!user?.id} />
+            <NewStudyButton isLoggedIn={!!user?.id} />
           </div>
           <div className="mt-6">
-            <FilterButtons />
+            <StudyFilterButtons />
           </div>
         </div>
 

@@ -1,8 +1,9 @@
 "use client";
 import { useModalStore } from "@/store/modalStore";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import LoginForm from "./forms/LoginForm";
-import SignupForm from "./forms/SignupForm";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+
 
 export default function LoginSignupModal() {
   const { openModal, close } = useModalStore();

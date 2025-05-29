@@ -1,5 +1,5 @@
 "use client";
-import { type FormState, login } from "@/actions/auth";
+import { type FormState, login } from "@/actions/auth-actions";
 import { useActionState, useEffect } from "react";
 import { User, Lock, LogIn } from "lucide-react";
 import { useModalStore } from "@/store/modalStore";

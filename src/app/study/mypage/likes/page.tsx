@@ -1,5 +1,5 @@
-import LikedPostList from "@/components/lists/LikedPostList";
-import MyPageTabs from "@/components/MyPageTabs";
+import LikedPostList from "@/components/user/LikedPostList";
+import MyPageTabs from "@/components/user/MyPageTabs";
 import { verifyAuth } from "@/lib/auth";
 
 export default async function LikesPage() {

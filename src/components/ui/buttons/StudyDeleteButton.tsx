@@ -2,7 +2,7 @@
 import { deleteStudy } from "@/actions/study-actions";
 import { useTransition } from "react";
 
-export default function DeleteButton({ postId }: { postId: number }) {
+export default function StudyDeleteButton({ postId }: { postId: number }) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {

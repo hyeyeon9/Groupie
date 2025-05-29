@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-type LikedWithStudy = Prisma.LikeGetPayload<{
+type ScrapedWithStudy = Prisma.ScrapGetPayload<{
   include: { study: true };
 }>; // Like 테이블에 study 테이블 조인한 형태로 가져온 타입 정의
 
@@ -13,11 +13,15 @@ type LikedWithStudy = Prisma.LikeGetPayload<{
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export default function LikedCalendar({ posts }: { posts: LikedWithStudy[] }) {
+export default function LikedCalendar({
+  posts,
+}: {
+  posts: ScrapedWithStudy[];
+}) {
   const [value, setValue] = useState<Value>(new Date()); // 선택된 날짜
-  const [selectedDatePosts, setSelectedDatePosts] = useState<LikedWithStudy[]>(
-    []
-  ); // 선택된 날짜에 해당하는 게시물 목록 (여러개일 수 있어서 배열)
+  const [selectedDatePosts, setSelectedDatePosts] = useState<
+    ScrapedWithStudy[]
+  >([]); // 선택된 날짜에 해당하는 게시물 목록 (여러개일 수 있어서 배열)
   const [isMounted, setIsMounted] = useState(false); // SSR 오류 방지용 (하이드레이션 오류 방지)
 
   const formatDate = (date: Date) => date.toISOString().split("T")[0]; // "2025-05-27" 이런 형태로 변환해서 날짜 비교에 사용
@@ -25,7 +29,7 @@ export default function LikedCalendar({ posts }: { posts: LikedWithStudy[] }) {
 
   useEffect(() => {
     setValue(new Date()); // 시작시 오늘 날짜로 선택
-    setIsMounted(true);  // 시작시 클라이언트 마운트 여부 트루
+    setIsMounted(true); // 시작시 클라이언트 마운트 여부 트루
   }, []);
 
   // 선택된 날짜의 스터디 필터링
@@ -34,14 +38,14 @@ export default function LikedCalendar({ posts }: { posts: LikedWithStudy[] }) {
       const dateStr = formatDate(value); // 오늘 날짜
       const postsForDate = posts.filter(
         (post) =>
-          post.study.startDate &&  //  마감일이 오늘 날짜랑 같은 애들만 필터링해서
+          post.study.startDate && //  마감일이 오늘 날짜랑 같은 애들만 필터링해서
           formatDate(new Date(post.study.startDate)) === dateStr
       );
       setSelectedDatePosts(postsForDate); // 넣어주기
     }
   }, [value, posts]);
 
-  // 스터디 글 클릭시 상세페이지로 이동하도록 
+  // 스터디 글 클릭시 상세페이지로 이동하도록
   const handleStudyClick = (studyId: number) => {
     router.push(`/study/${studyId}`);
   };
@@ -128,11 +132,11 @@ export default function LikedCalendar({ posts }: { posts: LikedWithStudy[] }) {
                       {post.study.title}
                     </h4>
                     <div className="flex items-center justify-between gap-2">
-                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                         {post.study.category}
                       </span>
                       <span className="text-xs text-gray-500">
-                        ♥︎ {post.study.like}
+                        ♥︎ {post.study.scrap}
                       </span>
                     </div>
                   </div>

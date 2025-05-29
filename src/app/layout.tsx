@@ -1,11 +1,11 @@
-import { logout } from "@/actions/auth";
+import { logout } from "@/actions/auth-actions";
 import { verifyAuth } from "@/lib/auth";
 import Link from "next/link";
 import type React from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import HeaderAuthButtons from "@/components/buttons/HeaderAuthButtons";
-import LoginSignupModal from "@/components/LoginSignupModal";
+import HeaderAuthButtons from "@/components/auth/HeaderAuthButtons";
+import LoginSignupModal from "@/components/auth/LoginSignupModal";
 
 export default async function AuthRootLayout({
   children,

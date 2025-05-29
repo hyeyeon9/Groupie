@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import PostCard from "../card/PostCard";
-import LikedCalendar from "../LikedCalendar";
+import PostCard from "../ui/card/PostCard";
+import LikedCalendar from "./LikedCalendar";
 import type { Prisma } from "@prisma/client";
 
 type ScrapedWithStudy = Prisma.ScrapGetPayload<{

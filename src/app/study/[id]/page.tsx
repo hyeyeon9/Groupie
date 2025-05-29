@@ -1,14 +1,14 @@
-import DeleteButton from "@/components/buttons/PostDeleteButtonDeleteBtn";
 import CommentList from "@/components/comments/CommentList";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import ViewCounter from "@/components/ViewCounter";
+import ViewCounter from "@/components/study/ViewCounter";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { formatRelativeTime } from "@/lib/date";
 import Image from "next/image";
-import ScrapButton from "@/components/buttons/ScrapButton";
-import ApplyButton from "@/components/buttons/ApplyButton";
+import ScrapButton from "@/components/ui/buttons/ScrapButton";
+import ApplyButton from "@/components/ui/buttons/ApplyButton";
+import StudyDeleteButton from "@/components/ui/buttons/StudyDeleteButton";
 
 type StudyDetailPageProps = {
   params: { id: string };
@@ -61,7 +61,7 @@ export default async function StudyDetailPage({
                 수정
               </button>
             </Link>
-            <DeleteButton postId={post.id} />
+            <StudyDeleteButton postId={post.id} />
           </div>
         ) : (
           <ApplyButton post={post} isLoggedIn={!!user?.id} />

@@ -1,5 +1,5 @@
 "use client";
-import { type FormState, signup } from "@/actions/auth";
+import { type FormState, signup } from "@/actions/auth-actions";
 import { useActionState } from "react";
 import { User, Lock, UserPlus, Hash } from "lucide-react";
 

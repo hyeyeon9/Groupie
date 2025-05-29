@@ -1,4 +1,4 @@
-import StudyForm from "@/components/forms/StudyForm"
+import StudyForm from "@/components/study/StudyForm"
 import Link from "next/link"
 
 export default function NewStudy() {

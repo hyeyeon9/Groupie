@@ -1,7 +1,7 @@
 import { updateUserProfileImage } from "@/actions/user-actions";
-import StudyListForMyPage from "@/components/lists/StudyListForMyPage";
-import MyPageTabs from "@/components/MyPageTabs";
-import UploadAvatar from "@/components/UploadAvatar";
+import StudyListForMyPage from "@/components/user/StudyListForMyPage";
+import MyPageTabs from "@/components/user/MyPageTabs";
+import UploadAvatar from "@/components/user/UploadAvatar";
 import { verifyAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 

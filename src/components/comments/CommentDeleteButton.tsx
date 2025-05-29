@@ -3,7 +3,7 @@
 import { deleteComment } from "@/actions/comments-actions";
 import { useTransition } from "react";
 
-export default function CommentDeleteBtn({ commentId }: { commentId: number }) {
+export default function CommentDeleteButton({ commentId }: { commentId: number }) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
