@@ -3,9 +3,15 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
 
-export default async function EditPage({ params }: { params: { id: string } }) {
+export default async function EditPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
   const post = await prisma.study.findUnique({
-    where: { id: Number(params?.id) },
+    where: { id: Number(id) },
   });
 
   if (!post) {
