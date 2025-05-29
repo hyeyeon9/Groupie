@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: { id: string } }
 ) {
   await prisma.study.update({
-    where: { id: Number(params.id) },
+    where: { id: Number(context.params.id) },
     data: { views: { increment: 1 } },
   });
 
