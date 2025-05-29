@@ -11,9 +11,9 @@ export default async function Top3Card() {
   today.setHours(0, 0, 0, 0); // 오늘 00:00:00
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <div className="flex mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">🔥 인기많은 스터디</h2>
+    <div className="bg-gray-100 rounded-xl shadow-sm  md:p-6 p-3">
+      <div className="flex md:mb-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-900 ">🔥 인기많은 스터디</h2>
       </div>
       <div>
         <PopularStudySlider posts={top3} />

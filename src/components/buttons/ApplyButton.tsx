@@ -29,7 +29,7 @@ export default function ApplyButton({
   return (
     <div className="flex justify-end">
       <button
-        className="hover:cursor-pointer bg-teal-200 w-fit py-2 px-3 rounded"
+        className="hover:cursor-pointer bg-red-500 w-fit py-2 px-3 rounded mb-2 text-white"
         onClick={handleApply}
       >
         지원하기

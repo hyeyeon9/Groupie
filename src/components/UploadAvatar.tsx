@@ -38,7 +38,7 @@ export default function UploadAvatar({
   return (
     <div className="flex items-center gap-4">
       <div className="relative w-32 h-32 group">
-        <div className="w-32 h-32 rounded-full overflow-hidden relative">
+        <div className="md:w-32 md:h-32 w-28 h-28 rounded-full overflow-hidden relative">
           <Image
             src={preview ?? defaultImage}
             alt="프로필"
@@ -64,7 +64,9 @@ export default function UploadAvatar({
           onChange={handleFileChange}
         />
       </div>
-      <div className="font-semibold text-2xl">{nickname}</div>
+      <div className="font-semibold md:text-2xl text-xl -mt-4 lg:-mt-0 -ml-2 lg:-ml-0">
+        {nickname}
+      </div>
     </div>
   );
 }

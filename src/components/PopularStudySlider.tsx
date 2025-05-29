@@ -52,9 +52,9 @@ export default function PopularStudySlider({ posts }: { posts: Study[] }) {
       {posts.map((item) => (
         <div
           key={item.id}
-          className=" flex flex-col justify-between h-full px-2"
+          className=" flex flex-col justify-between h-full px-1 md:px-2"
         >
-          <div className="border border-gray-200 rounded-xl p-5 shadow-sm ">
+          <div className=" rounded-xl p-5 hover:shadow-lg transition-all duration-300  bg-white">
             <div className="space-y-3">
               <div className="flex gap-2 -ml-1">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">

@@ -52,7 +52,7 @@ export default async function StudyDetailPage({
   return (
     <div className="flex flex-col max-w-3xl  mx-auto ">
       <ViewCounter id={post.id} />
-      <div className="flex  flex-col w-full min-h-100 mt-10 p-6 shadow-sm bg-white">
+      <div className="flex  flex-col w-full min-h-100 mt-10 px-6 md:py-6 shadow-sm bg-white ">
         <h1 className="text-4xl lg:text-5xl font-bold mb-4">{post.title}</h1>
         {post.author.id === user?.id ? (
           <div className="flex gap-3 justify-end mb-4">
@@ -96,7 +96,7 @@ export default async function StudyDetailPage({
           />
         </div>
 
-        <div className="border-t-1 border-t-gray-200 mt-3 py-5 grid grid-cols-2 gap-y-4">
+        <div className="border-t-1 border-t-gray-200 mt-3 py-5 grid grid-cols-2 gap-y-4 lg:text-base text-sm ">
           <div className="flex gap-5">
             <p className="font-bold">카테고리 </p>
             <p className="bg-gray-200 text-sm w-fit px-3 py-1   rounded-full ">
