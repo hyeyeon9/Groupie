@@ -1,20 +1,22 @@
-// app/loading.tsx
 "use client";
 
 import Image from "next/image";
 
 export default function Loading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="w-50 h-50 rounded overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center -mt-20 bg-white gap-4">
+      <div className="w-40 h-40 rounded-full overflow-hidden relative animate-bounce-slow">
         <Image
-          src="/Groupie.png" // public 폴더에 있는 이미지
+          src="/Groupie.png"
           alt="로딩 중..."
           fill
           priority
-          className="object-cover"
+          className="object-contain"
         />
       </div>
+      <p className="text-gray-600 text-sm animate-pulse mt-2">
+        잠시만 기다려주세요...
+      </p>
     </div>
   );
 }
