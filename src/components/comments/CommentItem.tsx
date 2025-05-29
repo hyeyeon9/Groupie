@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { updateComment } from "@/actions/comments-actions";
 import { formatRelativeTime } from "@/lib/date";
 import CommentDeleteButton from "./CommentDeleteButton";
+import Image from "next/image";
 
 type Props = {
   comment: {
@@ -39,8 +40,15 @@ export default function CommentItem({
     <div className="py-6 border-b border-gray-200 last:border-b-0">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-xs text-gray-600">👤</span>
+          <div>
+            <div className="w-8 h-8 rounded-full overflow-hidden relative">
+              <Image
+                src={comment.author.profileImage ?? "/default-avatar.png"}
+                alt="프로필"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
           <div>
             <p className="font-semibold text-gray-900">
