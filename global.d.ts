@@ -1,14 +1,16 @@
 // ./global.d.ts
 import React from "react";
+import { PrismaClient } from "@prisma/client";
 
 declare global {
+  // ✅ JSX 타입 오류 해결
   namespace JSX {
-    // React 18+의 JSX.Element
     type Element = React.ReactElement;
-
-    // 모든 태그 이름을 any로 허용
     interface IntrinsicElements {
       [elemName: string]: any;
     }
   }
+
+  // ✅ Prisma 싱글톤 타입 선언
+  let prisma: PrismaClient | undefined;
 }
