@@ -37,7 +37,7 @@ export default function CommentItem({
   };
 
   return (
-    <div className="py-6 border-b border-gray-200 last:border-b-0">
+    <div className="py-6 lg:py-7 border-b border-gray-200 last:border-b-0 ">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div>

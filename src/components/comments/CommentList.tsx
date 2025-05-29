@@ -27,7 +27,7 @@ export default async function CommentList({ postId }: { postId: number }) {
       </div>
 
       {/* 댓글 목록 */}
-      <div className="px-2">
+      <div className="px-2 md:mb-10 -mb-5">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <CommentItem
