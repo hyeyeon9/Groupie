@@ -51,9 +51,9 @@ export async function GET(req: Request) {
         title: true,
         category: true,
         startDate: true,
-        createdAt:true,
+        createdAt: true,
         scrap: true,
-        content:true,
+        content: true,
         author: {
           select: {
             id: true,
@@ -84,6 +84,10 @@ export async function GET(req: Request) {
       hasMore: !!nextCursor,
     });
   } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to fetch studies:", error);
+    }
+
     return NextResponse.json(
       { error: "Failed to fetch studies" },
       { status: 500 }
