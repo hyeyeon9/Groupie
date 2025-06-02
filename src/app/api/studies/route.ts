@@ -16,10 +16,6 @@ export async function GET(req: Request) {
 
     const take = 6;
 
-    console.log("타입", studyType);
-    console.log("category", category);
-    console.log("status", status);
-
     // where 조건 구성 - TypeScript가 Prisma가 기대하는 필드만 허용
     const andConditions: Prisma.StudyWhereInput[] = [];
 
@@ -50,16 +46,33 @@ export async function GET(req: Request) {
 
     const studies = await prisma.study.findMany({
       where,
+      select: {
+        id: true,
+        title: true,
+        category: true,
+        startDate: true,
+        createdAt:true,
+        scrap: true,
+        content:true,
+        author: {
+          select: {
+            id: true,
+            nickname: true,
+            profileImage: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true, // 댓글 개수만 필요하면 이렇게
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
       ...(cursor && {
         cursor: { id: cursor },
         skip: 1, // cursor 제외
       }),
       take,
-      include: {
-        author: true,
-        comments: true,
-      },
     });
 
     const nextCursor =
@@ -71,7 +84,6 @@ export async function GET(req: Request) {
       hasMore: !!nextCursor,
     });
   } catch (error) {
-    console.error("API Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch studies" },
       { status: 500 }

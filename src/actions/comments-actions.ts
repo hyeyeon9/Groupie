@@ -62,7 +62,7 @@ export async function updateComment(
   studyId: number
 ) {
   const { user } = await verifyAuth(); // 로그인 사용자 가져오기
-  console.log(user);
+
 
   if (!user) {
     return { error: "로그인이 필요합니다." };
