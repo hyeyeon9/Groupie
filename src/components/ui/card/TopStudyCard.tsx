@@ -1,14 +1,19 @@
+import ClientPopularStudy from "@/components/study/ClientPopularStudy";
 import { prisma } from "@/lib/prisma";
-import PopularStudySlider from "../../study/PopularStudySlider";
 
 export default async function TopStudyCard() {
   const top3 = await prisma.study.findMany({
+    select: {
+      id: true,
+      title: true,
+      category: true,
+      scrap: true,
+      views: true,
+      startDate: true,
+    },
     orderBy: [{ scrap: "desc" }, { views: "desc" }], // 1순위 스크랩, 2순위 조회수
-    take: 10,
+    take: 6,
   });
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
 
   return (
     <div className="bg-gray-100 rounded-xl shadow-sm  md:p-6 p-3">
@@ -18,7 +23,7 @@ export default async function TopStudyCard() {
         </h2>
       </div>
       <div>
-        <PopularStudySlider posts={top3} />
+        <ClientPopularStudy posts={top3} />
       </div>
     </div>
   );

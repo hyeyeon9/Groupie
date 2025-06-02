@@ -1,11 +1,23 @@
-"use client";
-import { Study } from "@prisma/client";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBookmark } from "react-icons/fa";
 import Slider from "react-slick";
 
-export default function PopularStudySlider({ posts }: { posts: Study[] }) {
+type TopStudyCardType = {
+  id: number;
+  title: string;
+  category: string;
+  scrap: number;
+  views: number;
+  startDate: Date | null;
+};
+
+export default function PopularStudySlider({
+  posts,
+}: {
+  posts: TopStudyCardType[];
+}) {
   const [isMounted, setIsMounted] = useState(false);
   const [today, setToday] = useState<Date | null>(null);
 
@@ -52,7 +64,7 @@ export default function PopularStudySlider({ posts }: { posts: Study[] }) {
       {posts.map((item) => (
         <div
           key={item.id}
-          className=" flex flex-col justify-between h-full px-1 md:px-2"
+          className=" flex flex-col justify-between w-[311px] h-[125px] px-1 md:px-2 "
         >
           <div className=" rounded-xl p-5 hover:shadow-lg transition-all duration-300  bg-white">
             <div className="space-y-3">

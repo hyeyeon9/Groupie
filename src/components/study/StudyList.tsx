@@ -1,15 +1,16 @@
 "use client";
-import { formatRelativeTime } from "@/lib/date";
-import type { Comment, Study, User } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
+
+import type { Study, User } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaBookmark } from "react-icons/fa";
+import StudyCard from "../ui/card/StudyCard";
+import StudyCardSkeleton from "./StudyCardSkeleton";
 
 type StudyType = Study & {
-  author: User;
-  comments: Comment[];
+  author: Pick<User, "id" | "nickname" | "profileImage">;
+  _count: {
+    comments: number;
+  };
 };
 
 export default function StudyList() {
@@ -26,9 +27,6 @@ export default function StudyList() {
   const query = searchParams.get("query");
   const status = searchParams.get("status");
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
-
   const fetchStudies = async (reset = false) => {
     if (loading) return;
     setLoading(true);
@@ -41,8 +39,6 @@ export default function StudyList() {
       if (studyType) params.append("studyType", studyType);
       if (status) params.append("status", status);
 
-      console.log("parmas", status, studyType, category);
-
       const res = await fetch(`/api/studies?${params.toString()}`);
 
       if (!res.ok) {
@@ -50,6 +46,7 @@ export default function StudyList() {
       }
 
       const data = await res.json();
+      console.log(data);
 
       if (reset) {
         setStudies(data.posts);
@@ -59,8 +56,6 @@ export default function StudyList() {
 
       setCursor(data.nextCursor);
       setHasMore(data.hasMore);
-    } catch (error) {
-      console.error("Failed to fetch studies:", error);
     } finally {
       setLoading(false);
     }
@@ -91,24 +86,6 @@ export default function StudyList() {
     return () => observer.disconnect();
   }, [hasMore, loading, cursor, initialized]);
 
-  if (!initialized && loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-gray-600">로딩 중...</span>
-      </div>
-    );
-  }
-
-  if (initialized && studies.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-gray-400 text-6xl mb-4">📚</div>
-        <p className="text-gray-500 text-lg">등록된 글이 없습니다.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -118,89 +95,27 @@ export default function StudyList() {
         </span>
       </div>
 
+      {/* 카드 영역 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {studies.map((study, index) => (
-          <Link href={`/study/${study.id}`} key={study.id}>
-            <div
-              ref={index === studies.length - 1 ? observerRef : null}
-              className="group bg-white rounded shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start gap-5">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200">
-                    {study.category}
-                  </span>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      study.startDate && new Date(study.startDate) < today
-                        ? "bg-gray-300 text-gray-500"
-                        : "bg-green-200 text-green-700"
-                    }`}
-                  >
-                    {study.startDate && new Date(study.startDate) < today
-                      ? "모집 마감"
-                      : "모집중"}
-                  </span>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-900  transition-colors line-clamp-1">
-                    {study.title}
-                  </h3>
-                  <p
-                    className="text-sm text-gray-600 line-clamp-2 leading-relaxed
-                  min-h-[48px]"
-                  >
-                    {study.content
-                      .replace(/[#_*~`>[\]()\-!\n]/g, "")
-                      .slice(0, 100)}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3 text-xs text-gray-500">
-                  <span>{formatRelativeTime(new Date(study.createdAt))}</span>
-                  <span>•</span>
-                  <span>{study.comments.length}개의 댓글</span>
-                </div>
-
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                        <Image
-                          src={
-                            study.author.profileImage ?? "/default-avatar.png"
-                          }
-                          alt="프로필"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-700 font-medium ">
-                      {study.author.nickname}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-red-500">
-                    <span className="text-sm">
-                      {" "}
-                      <FaBookmark />
-                    </span>
-                    <span className="text-sm font-medium">{study.scrap}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+        {!initialized && loading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <StudyCardSkeleton key={i} />
+            ))
+          : studies.map((study, index) => (
+              <StudyCard
+                key={study.id}
+                study={study}
+                isLast={index === studies.length - 1}
+                observerRef={observerRef}
+              />
+            ))}
       </div>
 
-      {loading && (
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">
-            더 많은 스터디를 불러오는 중...
-          </span>
+      {/* 데이터 다 로드 후, 아무 것도 없을 때 */}
+      {initialized && studies.length === 0 && (
+        <div className="text-center py-12 col-span-3 w-full">
+          <div className="text-gray-400 text-6xl mb-4">📚</div>
+          <p className="text-gray-500 text-lg">등록된 글이 없습니다.</p>
         </div>
       )}
     </div>
