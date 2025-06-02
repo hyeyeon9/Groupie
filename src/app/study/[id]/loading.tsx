@@ -7,7 +7,7 @@ export default function Loading() {
     <div className="min-h-screen flex flex-col items-center justify-center -mt-20 bg-white gap-4">
       <div className="w-40 h-40 rounded-full overflow-hidden relative animate-bounce-slow">
         <Image
-          src="/Groupie.png"
+          src="/Groupie.webp"
           alt="로딩 중..."
           fill
           priority
