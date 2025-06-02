@@ -5,7 +5,7 @@ import type React from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import HeaderAuthButtons from "@/components/auth/HeaderAuthButtons";
-import LoginSignupModal from "@/components/auth/LoginSignupModal";
+import DynamicModalWrapper from "@/components/auth/DynamicmodalWrapper";
 
 export default async function AuthRootLayout({
   children,
@@ -17,7 +17,7 @@ export default async function AuthRootLayout({
     <html lang="ko">
       <body>
         <Toaster position="top-center" reverseOrder={false} />
-        <LoginSignupModal />
+        <DynamicModalWrapper />
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
@@ -51,7 +51,7 @@ export default async function AuthRootLayout({
             </div>
           </div>
         </header>
-        <main className="min-h-screen ">{children}</main>
+        <main className="min-h-[100vh] overflow-hidden">{children}</main>
       </body>
     </html>
   );
