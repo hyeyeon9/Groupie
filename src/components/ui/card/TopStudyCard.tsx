@@ -11,7 +11,7 @@ export default async function TopStudyCard() {
       views: true,
       startDate: true,
     },
-    orderBy: [{ scrap: "desc" }, { views: "desc" }], // 1순위 스크랩, 2순위 조회수
+    orderBy: [{ scrap: "desc" }, { views: "desc" }, { createdAt: "desc" }], // 1순위 스크랩, 2순위 조회수
     take: 6,
   });
 
