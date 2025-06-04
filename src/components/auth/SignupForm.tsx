@@ -1,12 +1,27 @@
 "use client";
 import { type FormState, signup } from "@/actions/auth-actions";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { User, Lock, UserPlus, Hash } from "lucide-react";
+import { useModalStore } from "@/store/modalStore";
+
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function SignupForm() {
   const [formState, formAction] = useActionState<FormState, FormData>(signup, {
     errors: {},
   });
+
+  const { close } = useModalStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (formState.success) {
+      close(); // 모달 닫고
+      toast.success("회원가입 완료! 로그인을 해주세요.");
+      router.refresh(); // 현재 페이지를 서버에서 다시 fetch해서 새로고침
+    }
+  }, [formState, close, router]);
 
   return (
     <div className="w-full max-w-md mx-auto">
