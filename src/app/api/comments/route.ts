@@ -5,9 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { user } = await verifyAuth();
   if (!user) {
-    return {
-      error: "로그인 필요",
-    };
+    return NextResponse.json({ error: "로그인 필요" }, { status: 401 });
   }
 
   const { postId, content } = await req.json();
@@ -23,5 +21,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ comment });
 }
-
-
