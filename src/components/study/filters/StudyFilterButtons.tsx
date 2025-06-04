@@ -38,7 +38,11 @@ export default function StudyFilterBar() {
   return (
     <div className="flex flex-wrap gap-4">
       {/* 카테고리 셀렉트 */}
+      <label htmlFor="study-category" className="sr-only">
+        스터디 카테고리
+      </label>
       <select
+        id="study-category"
         value={currentCategory}
         onChange={(e) => updateParam("category", e.target.value)}
         className="border border-gray-300 rounded px-3 py-2 text-sm"
@@ -51,7 +55,11 @@ export default function StudyFilterBar() {
       </select>
 
       {/* 온라인/오프라인 셀렉트 */}
+      <label htmlFor="study-type" className="sr-only">
+        스터디 형식(온라인/오프라인)
+      </label>
       <select
+        id="study-type"
         value={currentType}
         onChange={(e) => updateParam("studyType", e.target.value)}
         className="border border-gray-300 rounded px-3 py-2 text-sm"
