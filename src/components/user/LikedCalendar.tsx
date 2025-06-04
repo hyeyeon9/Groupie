@@ -1,14 +1,23 @@
 "use client";
-import type { Prisma } from "@prisma/client";
+import type { Scrap, Study } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-type ScrapedWithStudy = Prisma.ScrapGetPayload<{
-  include: { study: true };
-}>; // Like 테이블에 study 테이블 조인한 형태로 가져온 타입 정의
-
+type ScrapedWithStudy = Scrap & {
+  study: Pick<
+    Study,
+    | "id"
+    | "title"
+    | "content"
+    | "category"
+    | "createdAt"
+    | "startDate"
+    | "scrap"
+    | "authorId"
+  >;
+};
 // react-calendar는 단일 날짜나 날짜 번위를 선택할 수 있기에 아래와 같이 정의
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];

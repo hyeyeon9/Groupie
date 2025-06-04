@@ -1,16 +1,39 @@
 import { prisma } from "@/lib/prisma";
 import PostCard from "../ui/card/PostCard";
 import LikedCalendar from "./LikedCalendar";
-import type { Prisma } from "@prisma/client";
+import type { Scrap, Study } from "@prisma/client";
 
-type ScrapedWithStudy = Prisma.ScrapGetPayload<{
-  include: { study: true };
-}>;
+type ScrapedWithStudy = Scrap & {
+  study: Pick<
+    Study,
+    | "id"
+    | "title"
+    | "content"
+    | "category"
+    | "createdAt"
+    | "startDate"
+    | "scrap"
+    | "authorId"
+  >;
+};
 
 export default async function LikedPostList({ userId }: { userId: number }) {
   const likedPosts: ScrapedWithStudy[] = await prisma.scrap.findMany({
     where: { userId },
-    include: { study: true },
+    include: {
+      study: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          category: true,
+          createdAt: true,
+          startDate: true,
+          scrap: true,
+          authorId: true,
+        },
+      },
+    },
   });
 
   if (likedPosts.length === 0) {

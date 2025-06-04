@@ -8,6 +8,15 @@ export default async function StudyListForMyPage({
 }) {
   const posts = await prisma.study.findMany({
     where: { authorId: userId },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      category: true,
+      createdAt: true,
+      startDate: true,
+      scrap: true,
+    },
     orderBy: { createdAt: "desc" },
   });
 

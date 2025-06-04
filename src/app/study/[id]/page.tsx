@@ -19,37 +19,57 @@ export default async function StudyDetailPage({
 }: StudyDetailPageProps) {
   const { id } = await params;
   const numberId = Number(id);
+  const { user } = await verifyAuth();
 
-  const post = await prisma.study.findUnique({
-    where: { id: numberId },
-    include: {
-      author: true,
-    },
-  });
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
+  // 모든 필요한 데이터를 한 번에 병렬로 가져오기
+  const [post, existingScrap] = await Promise.all([
+    // 게시글과 댓글의 작성자 정보를 한 번에 가져오기
+    prisma.study.findUnique({
+      where: { id: numberId },
+      include: {
+        author: {
+          select: {
+            id: true,
+            nickname: true,
+            profileImage: true,
+          },
+        },
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                nickname: true,
+                profileImage: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    }),
+    // 스크랩 정보도 병렬로 가져오기 (사용자가 로그인된 경우에만)
+    user
+      ? prisma.scrap.findUnique({
+          where: {
+            userId_studyId: {
+              userId: user.id,
+              studyId: numberId,
+            },
+          },
+        })
+      : null,
+  ]);
 
   if (!post) {
     return <p className="text-center mt-10">존재하지 않는 게시글입니다.</p>;
   }
 
-  const { user } = await verifyAuth();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
 
-  let initiallyScraped = false;
-
-  if (user) {
-    const existingScrap = await prisma.scrap.findUnique({
-      where: {
-        userId_studyId: {
-          userId: user.id,
-          studyId: post.id,
-        },
-      },
-    });
-
-    initiallyScraped = !!existingScrap; // !!은 값을 boolean으로 강제 변환하는 표현
-  }
+  const initiallyScraped = !!existingScrap;
+  const comments = post.comments;
 
   return (
     <div className="flex flex-col max-w-3xl  mx-auto ">
@@ -161,7 +181,11 @@ export default async function StudyDetailPage({
         </div>
       </div>
       <div className="mt-10 w-full px-5 lg:p-0 pb-20 ">
-        <CommentList postId={post.id} />
+        <CommentList
+          postId={post.id}
+          initialComments={comments}
+          currentUserId={user?.id}
+        />
       </div>
     </div>
   );
