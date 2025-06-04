@@ -26,15 +26,28 @@ export default function ScrapButton({
       open("login");
       return;
     }
+
+    // Optimistic UI로 일단 먼저 바꿔줌
+    const optimisticLiked = !liked;
+    setLiked(optimisticLiked);
+    setScrapCount((prev) => prev + (optimisticLiked ? 1 : -1));
+    toast.success(optimisticLiked ? "스크랩 완료!" : "스크랩 제거!");
+
+    // 실제 서버 연동
     startTransition(async () => {
-      const res = await toggleLike(studyId);
-      setLiked(!!res.liked);
-      if (liked) {
-        toast.success("스크랩 제거!");
-      } else {
-        toast.success("스크랩 완료!");
+      try {
+        const res = await toggleLike(studyId);
+        setLiked(!!res.liked);
+      } catch (e) {
+        // 개발 환경에서만 에러 로그 출력
+        if (process.env.NODE_ENV === "development") {
+          console.log(e);
+        }
+        // 에러시 원복
+        setLiked(liked);
+        setScrapCount((prev) => prev + (liked ? 1 : -1));
+        toast.error("스크랩 처리 실패! 잠시 후 다시 시도해 주세요.");
       }
-      setScrapCount((prev) => prev + (res.liked ? 1 : -1));
     });
   };
 
