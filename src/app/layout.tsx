@@ -7,6 +7,12 @@ import "./globals.css";
 import HeaderAuthButtons from "@/components/auth/HeaderAuthButtons";
 import DynamicModalWrapper from "@/components/auth/DynamicmodalWrapper";
 
+export const metadata = {
+  title: "스터디 모집 - Groupie",
+  description:
+    "관심 있는 스터디를 찾고 모집해보세요. 프론트엔드, 백엔드, 토익, 자격증까지 다양한 스터디가 준비돼 있어요.",
+};
+
 export default async function AuthRootLayout({
   children,
 }: {
