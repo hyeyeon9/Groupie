@@ -25,7 +25,7 @@ export default function CommentForm({
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!content.trim()) return;
 
@@ -65,9 +65,10 @@ export default function CommentForm({
       <div className="flex justify-end">
         <button
           type="submit"
+          disabled={loading}
           className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          댓글 작성
+          {loading ? "작성 중..." : "댓글 작성"}
         </button>
       </div>
     </form>
