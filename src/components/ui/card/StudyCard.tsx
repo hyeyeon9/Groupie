@@ -1,6 +1,6 @@
 import React from "react";
 import { formatRelativeTime } from "@/lib/date";
-import {  Study, User } from "@prisma/client";
+import { Study, User } from "@prisma/client";
 
 import Image from "next/image";
 import { FaBookmark } from "react-icons/fa";
@@ -37,8 +37,8 @@ const StudyCard = ({ study, isLast, observerRef }: Props) => {
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                 study.startDate && new Date(study.startDate) < today
-                  ? "bg-gray-300 text-gray-500"
-                  : "bg-green-200 text-green-700"
+                  ? "bg-gray-300 text-gray-800"
+                  : "bg-green-200 text-gray-800"
               }`}
             >
               {study.startDate && new Date(study.startDate) < today

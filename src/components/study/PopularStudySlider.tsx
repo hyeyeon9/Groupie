@@ -75,8 +75,8 @@ export default function PopularStudySlider({
                 <p
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                     item.startDate && new Date(item.startDate) < today
-                      ? "bg-gray-300 text-gray-500"
-                      : "bg-green-200 text-green-700"
+                      ? "bg-gray-300 text-gray-800"
+                      : "bg-green-200 text-gray-800"
                   }`}
                 >
                   {" "}
