@@ -1,25 +1,66 @@
 "use client";
-import { createComment } from "@/actions/comments-actions";
-import { useActionState } from "react";
 
-export default function CommentForm({ postId }: { postId: number }) {
-  const [formState, formAction] = useActionState(createComment, {
-    error: null,
-  });
+import { useState } from "react";
+
+type Comment = {
+  id: number;
+  content: string;
+  createdAt: Date;
+  author: {
+    id: number;
+    nickname: string;
+    profileImage: string | null;
+  };
+};
+
+type CommentFormProps = {
+  postId: number;
+  onCommentAdd: (comment: Comment) => void;
+};
+
+export default function CommentForm({
+  postId,
+  onCommentAdd,
+}: CommentFormProps) {
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+
+    setLoading(true);
+
+    // 서버에 새 댓글 POST
+    const res = await fetch("/api/comments", {
+      method: "POST",
+      body: JSON.stringify({ postId, content }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    setLoading(false);
+
+    if (data.comment) {
+      // 부모에게 새 댓글 전달
+      onCommentAdd(data.comment);
+      setContent("");
+    } else {
+      // 에러 처리
+      alert(data.error || "댓글 등록 실패!");
+    }
+  };
 
   return (
-    <form className="space-y-4" action={formAction}>
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <input hidden name="postId" value={postId} readOnly />
       <div>
         <textarea
-          name="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           placeholder="댓글을 작성하세요."
           rows={3}
           className="w-full p-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder-gray-500"
         />
-        {formState?.error && (
-          <p className="mt-2 text-sm text-red-600">{formState.error}</p>
-        )}
       </div>
       <div className="flex justify-end">
         <button

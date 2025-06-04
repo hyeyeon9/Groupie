@@ -1,37 +1,43 @@
 "use client";
-import { User } from "@prisma/client";
-
 import { useState, useTransition } from "react";
-import { updateComment } from "@/actions/comments-actions";
 import { formatRelativeTime } from "@/lib/date";
 import CommentDeleteButton from "./CommentDeleteButton";
 import Image from "next/image";
 
-type Props = {
-  comment: {
+type Comment = {
+  id: number;
+  content: string;
+  createdAt: Date;
+  author: {
     id: number;
-    content: string;
-    createdAt: Date;
-    studyId: number;
-    authorId: number;
-    author: User;
+    nickname: string;
+    profileImage: string | null;
   };
 };
 
 export default function CommentItem({
   comment,
   currentUserId,
-}: Props & {
+  onUpdate,
+}: {
+  comment: Comment;
   currentUserId?: number;
+  onUpdate: (Comment: Comment) => void;
 }) {
-  const isMyComment = currentUserId === comment.authorId;
+  const isMyComment = currentUserId === comment.author.id;
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPending, startTransition] = useTransition();
 
   const handleUpdate = () => {
     startTransition(async () => {
-      await updateComment(comment.id, editedContent, comment.studyId);
+      const res = await fetch(`/api/comments/${comment.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: editedContent }),
+      });
+      const updatedComment = await res.json();
+      onUpdate(updatedComment);
       setIsEditing(false);
     });
   };
