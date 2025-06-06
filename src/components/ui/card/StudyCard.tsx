@@ -19,9 +19,34 @@ interface Props {
   observerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const StudyCard = ({ study, isLast, observerRef }: Props) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // 오늘 00:00:00
+const StudyCard = React.memo(({ study, isLast, observerRef }: Props) => {
+  // 오늘 날짜를 매번 렌더링 하지말고 useMemo로 메모제이션
+  const today = React.useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
+
+  // 모집 상태로 useMemo로 계산 (바뀔때만 다시 계산하게)
+  const recruitmentStatus = React.useMemo(() => {
+    if (!study.startDate)
+      return { text: "모집중", className: "bg-green-200 text-gray-800" };
+
+    const isExpired = new Date(study.startDate) < today;
+    return isExpired
+      ? { text: "모집 마감", className: "bg-gray-300 text-gray-800" }
+      : { text: "모집중", className: "bg-green-200 text-gray-800" };
+  }, [study.startDate, today]);
+
+  // 내용 미리보기를 useMemo로 처리
+  const contentPreview = React.useMemo(() => {
+    return study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100);
+  }, [study.content]);
+
+  // 상대시간을 useMemo로 처리
+  const relativeTime = React.useMemo(() => {
+    return formatRelativeTime(new Date(study.createdAt));
+  }, [study.createdAt]);
 
   return (
     <Link href={`/study/${study.id}`} key={study.id}>
@@ -35,15 +60,9 @@ const StudyCard = ({ study, isLast, observerRef }: Props) => {
               {study.category}
             </span>
             <span
-              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                study.startDate && new Date(study.startDate) < today
-                  ? "bg-gray-300 text-gray-800"
-                  : "bg-green-200 text-gray-800"
-              }`}
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${recruitmentStatus.className}`}
             >
-              {study.startDate && new Date(study.startDate) < today
-                ? "모집 마감"
-                : "모집중"}
+              {recruitmentStatus.text}
             </span>
           </div>
 
@@ -55,12 +74,12 @@ const StudyCard = ({ study, isLast, observerRef }: Props) => {
               className="text-sm text-gray-600 line-clamp-2 leading-relaxed
                   min-h-[48px]"
             >
-              {study.content.replace(/[#_*~`>[\]()\-!\n]/g, "").slice(0, 100)}
+              {contentPreview}
             </p>
           </div>
 
           <div className="flex items-center gap-3 text-xs text-gray-500">
-            <span>{formatRelativeTime(new Date(study.createdAt))}</span>
+            <span>{relativeTime}</span>
             <span>•</span>
             <span>{study._count.comments}개의 댓글</span>
           </div>
@@ -91,6 +110,11 @@ const StudyCard = ({ study, isLast, observerRef }: Props) => {
       </div>
     </Link>
   );
-};
+});
+
+StudyCard.displayName = "StudyCard";
+// 디버깅 시 컴포넌트 이름을 명확하게 보여주기 위해
+// 안하면 Memo || Anonymous
+// 하면 Memo(StudyCard)
 
 export default StudyCard;
