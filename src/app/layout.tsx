@@ -47,7 +47,7 @@ export default async function AuthRootLayout({
                     <form action={logout}>
                       <button
                         className="inline-flex items-center px-3 py-1.5 
-                      lg:px-4 lg:py-2 text-sm lg:text-base font-medium text-white
+                      lg:px-4 lg:py-2 text-sm lg:text-base font-medium text-white hover:cursor-pointer
                        bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                       >
                         로그아웃
