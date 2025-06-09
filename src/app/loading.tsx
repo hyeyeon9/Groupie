@@ -9,10 +9,10 @@ export default function Loading() {
         <Image
           src="/Groupie.webp"
           alt="로딩 중..."
-          fill
+          width={160}
+          height={160}
           priority
           className="object-contain"
-          
         />
       </div>
       <p className="text-gray-600 text-sm animate-pulse mt-2">
