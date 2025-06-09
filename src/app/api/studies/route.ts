@@ -70,7 +70,7 @@ export async function GET(req: Request) {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       ...(cursor && {
         cursor: { id: cursor },
         skip: 1, // cursor 제외

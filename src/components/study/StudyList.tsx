@@ -1,11 +1,12 @@
 "use client";
 
 import type { Study, User } from "@prisma/client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import StudyCard from "../ui/card/StudyCard";
 import StudyCardSkeleton from "./StudyCardSkeleton";
 import { useStudyFilters } from "@/hooks/useStudyFilters";
 import { useStudyFilterStore } from "@/store/studyFilterStore";
+import { FixedSizeGrid as Grid } from "react-window";
 
 type StudyType = Study & {
   author: Pick<User, "id" | "nickname" | "profileImage">;
@@ -14,6 +15,10 @@ type StudyType = Study & {
   };
 };
 
+const CARD_HEIGHT = 270; // 실제 카드 높이에 맞게 조정!
+const CARD_WIDTH = 387; // 실제 카드 너비에 맞게 조정!
+const COLUMN_COUNT = 3; // 고정 그리드(3열) 기준
+
 export default function StudyList() {
   const [studies, setStudies] = useState<StudyType[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
@@ -21,7 +26,6 @@ export default function StudyList() {
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [isOptimisticLoading, setIsOptimisticLoading] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
 
   // URL 파라미터 동기화
   const { category, studyType, status, query } = useStudyFilters();
@@ -31,19 +35,6 @@ export default function StudyList() {
 
   // 스켈레톤 배열 메모이제이션
   const skeletonArray = useMemo(() => Array.from({ length: 3 }), []);
-
-  // 스터디 카드 렌더링 함수를 useCallback으로 메모이제이션
-  const renderStudyCard = useCallback(
-    (study: StudyType, index: number) => (
-      <StudyCard
-        key={study.id}
-        study={study}
-        isLast={index === studies.length - 1}
-        observerRef={observerRef}
-      />
-    ),
-    [studies.length, observerRef]
-  );
 
   // 스켈레톤 렌더링 함수를 useCallback으로 메모이제이션
   const renderSkeleton = useCallback(
@@ -74,7 +65,12 @@ export default function StudyList() {
       if (reset) {
         setStudies(data.posts);
       } else {
-        setStudies((prev) => [...prev, ...data.posts]);
+        setStudies((prev) => {
+          const all = [...prev, ...data.posts];
+          return Array.from(
+            new Map(all.map((item) => [item.id, item])).values()
+          );
+        });
       }
 
       setCursor(data.nextCursor);
@@ -101,7 +97,6 @@ export default function StudyList() {
     }
   }, [refreshTrigger, triggerOptimisticUpdate]);
 
-
   // URL 파라미터 변경 감지
   useEffect(() => {
     // 이미 낙관적 업데이트가 진행중이면 스킵
@@ -120,24 +115,6 @@ export default function StudyList() {
     fetchStudies(true).then(() => setInitialized(true));
   }, [category, query, studyType, status]);
 
-  // 무한 스크롤 처리
-  useEffect(() => {
-    if (!observerRef.current || !hasMore || loading || !initialized) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && cursor) {
-          fetchStudies();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => observer.disconnect();
-  }, [hasMore, loading, cursor, initialized]);
-
   // 로딩 중이거나 데이터가 없을 때 스켈레톤 표시
   const shouldShowSkeleton =
     (loading || isOptimisticLoading) && studies.length === 0;
@@ -152,11 +129,53 @@ export default function StudyList() {
       </div>
 
       {/* 카드 영역 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {shouldShowSkeleton
-          ? skeletonArray.map(renderSkeleton)
-          : studies.map(renderStudyCard)}
-      </div>
+      {shouldShowSkeleton ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {skeletonArray.map(renderSkeleton)}
+        </div>
+      ) : (
+        <div className="overflow-hidden w-full">
+          <Grid
+            columnCount={COLUMN_COUNT}
+            columnWidth={CARD_WIDTH + 18}
+            height={700} // 뷰포트 높이(px), 조정 가능
+            rowCount={Math.ceil(studies.length / COLUMN_COUNT)}
+            rowHeight={CARD_HEIGHT + 24}
+            width={(CARD_WIDTH + 24) * COLUMN_COUNT}
+            onItemsRendered={({ visibleRowStopIndex }) => {
+              console.log("visibleRowStopIndex", visibleRowStopIndex);
+              const lastVisibleIndex = (visibleRowStopIndex + 1) * COLUMN_COUNT;
+              console.log("lastVisibleIndex", lastVisibleIndex);
+
+              if (
+                hasMore &&
+                !loading &&
+                lastVisibleIndex >= studies.length - COLUMN_COUNT
+              ) {
+                fetchStudies();
+              }
+            }}
+          >
+            {({ columnIndex, rowIndex, style }) => {
+              const idx = rowIndex * COLUMN_COUNT + columnIndex;
+              if (idx >= studies.length) return null;
+              return (
+                <div
+                  style={{
+                    ...style,
+                    left: (style.left as number) + 12 / 2, // 양 옆 gap/2씩
+                    top: (style.top as number) + 12 / 2,
+                    width: CARD_WIDTH,
+                    height: CARD_HEIGHT,
+                  }}
+                >
+                  <StudyCard key={studies[idx].id} study={studies[idx]} />
+                </div>
+              );
+            }}
+          </Grid>
+        </div>
+      )}
 
       {/* 데이터 다 로드 후, 아무 것도 없을 때 */}
       {initialized &&

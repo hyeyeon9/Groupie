@@ -1,5 +1,5 @@
 import React from "react";
-import { formatRelativeTime } from "@/lib/date";
+import { formatRelativeTime, getToday } from "@/lib/date";
 import { Study, User } from "@prisma/client";
 
 import Image from "next/image";
@@ -15,17 +15,11 @@ type StudyType = Study & {
 
 interface Props {
   study: StudyType;
-  isLast: boolean;
-  observerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const StudyCard = React.memo(({ study, isLast, observerRef }: Props) => {
+const StudyCard = React.memo(({ study }: Props) => {
   // 오늘 날짜를 매번 렌더링 하지말고 useMemo로 메모제이션
-  const today = React.useMemo(() => {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    return date;
-  }, []);
+  const today = getToday();
 
   // 모집 상태로 useMemo로 계산 (바뀔때만 다시 계산하게)
   const recruitmentStatus = React.useMemo(() => {
@@ -51,7 +45,6 @@ const StudyCard = React.memo(({ study, isLast, observerRef }: Props) => {
   return (
     <Link href={`/study/${study.id}`} key={study.id}>
       <div
-        ref={isLast ? observerRef : null}
         className=" min-h-[200px] group bg-white rounded shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
       >
         <div className="space-y-4">
