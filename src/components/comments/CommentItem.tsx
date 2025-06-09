@@ -19,10 +19,12 @@ export default function CommentItem({
   comment,
   currentUserId,
   onUpdate,
+  onDelete,
 }: {
   comment: Comment;
   currentUserId?: number;
   onUpdate: (Comment: Comment) => void;
+  onDelete: (commentId: number) => void;
 }) {
   const isMyComment = currentUserId === comment.author.id;
   const [isEditing, setIsEditing] = useState(false);
@@ -76,7 +78,10 @@ export default function CommentItem({
                 수정
               </button>
             )}
-            <CommentDeleteButton commentId={comment.id} />
+            <CommentDeleteButton
+              commentId={comment.id}
+              onDelete={() => onDelete(comment.id)}
+            />
           </div>
         )}
       </div>

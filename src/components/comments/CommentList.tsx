@@ -36,6 +36,10 @@ export default function CommentList({
     setComments((prev) => prev.map((c) => (c.id === comment.id ? comment : c)));
   };
 
+  const handleCommentDelete = (commentId: number) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+  };
+
   return (
     <div className="bg-white overflow-hidden">
       {/* 댓글 헤더 */}
@@ -56,6 +60,7 @@ export default function CommentList({
           comments.map((comment) => (
             <CommentItem
               onUpdate={handleCommentUpdate}
+              onDelete={handleCommentDelete}
               key={comment.id}
               currentUserId={currentUserId}
               comment={comment}

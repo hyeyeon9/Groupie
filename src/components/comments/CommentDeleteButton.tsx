@@ -1,14 +1,23 @@
 "use client";
 
-import { deleteComment } from "@/actions/comments-actions";
 import { useTransition } from "react";
 
-export default function CommentDeleteButton({ commentId }: { commentId: number }) {
+export default function CommentDeleteButton({
+  commentId,
+  onDelete,
+}: {
+  commentId: number;
+  onDelete: (commentId: number) => void;
+}) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    startTransition(() => {
-      deleteComment(commentId);
+    startTransition(async () => {
+      await fetch(`/api/comments/${commentId}`, {
+        method: "DELETE",
+      });
+
+      onDelete(commentId);
     });
   };
 
