@@ -36,7 +36,10 @@ export async function GET(req: Request) {
 
     if (query && query !== "null") {
       andConditions.push({
-        OR: [{ title: { contains: query } }, { content: { contains: query } }],
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { content: { contains: query, mode: "insensitive" } },
+        ],
       });
     }
 

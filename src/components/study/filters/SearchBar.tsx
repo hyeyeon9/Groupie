@@ -1,5 +1,6 @@
 "use client";
 
+import { useStudyFilterStore } from "@/store/studyFilterStore";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -9,11 +10,16 @@ export default function SearchBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const updateOptimisticFilter = useStudyFilterStore(
+    (state) => state.updateOptimisticFilter
+  );
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault(); // 새로고침 막고
     const params = new URLSearchParams(searchParams.toString());
     if (keyword.trim()) {
       params.set("query", keyword);
+      updateOptimisticFilter("query", keyword);
     } else {
       params.delete("query");
     }
