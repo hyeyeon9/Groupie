@@ -2,7 +2,7 @@ import StudyFilterButtons from "@/components/study/filters/StudyFilterButtons";
 import StudyList from "@/components/study/StudyList";
 import SearchBar from "@/components/study/filters/SearchBar";
 
-import NewStudyButton from "@/components/study/NewStudyButton";
+import NewStudyButton from "@/components/ui/buttons/NewStudyButton";
 import { verifyAuth } from "@/lib/auth";
 import TopStudyCard from "@/components/ui/card/TopStudyCard";
 

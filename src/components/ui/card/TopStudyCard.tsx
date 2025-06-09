@@ -1,4 +1,5 @@
-import ClientPopularStudy from "@/components/study/ClientPopularStudy";
+
+import ClientPopularStudy from "@/components/popular/ClientPopularStudy";
 import { prisma } from "@/lib/prisma";
 
 export default async function TopStudyCard() {
