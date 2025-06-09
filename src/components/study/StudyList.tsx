@@ -7,6 +7,7 @@ import StudyCardSkeleton from "./StudyCardSkeleton";
 import { useStudyFilters } from "@/hooks/useStudyFilters";
 import { useStudyFilterStore } from "@/store/studyFilterStore";
 import { FixedSizeGrid as Grid } from "react-window";
+import { useResponsiveGrid } from "@/hooks/useResponsiveGrid";
 
 type StudyType = Study & {
   author: Pick<User, "id" | "nickname" | "profileImage">;
@@ -15,10 +16,6 @@ type StudyType = Study & {
   };
 };
 
-const CARD_HEIGHT = 270; // 실제 카드 높이에 맞게 조정!
-const CARD_WIDTH = 387; // 실제 카드 너비에 맞게 조정!
-const COLUMN_COUNT = 3; // 고정 그리드(3열) 기준
-
 export default function StudyList() {
   const [studies, setStudies] = useState<StudyType[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
@@ -26,6 +23,8 @@ export default function StudyList() {
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [isOptimisticLoading, setIsOptimisticLoading] = useState(false);
+
+  const { columnCount, cardWidth, cardHeight, gridWidth } = useResponsiveGrid();
 
   // URL 파라미터 동기화
   const { category, studyType, status, query } = useStudyFilters();
@@ -136,28 +135,25 @@ export default function StudyList() {
       ) : (
         <div className="overflow-hidden w-full">
           <Grid
-            columnCount={COLUMN_COUNT}
-            columnWidth={CARD_WIDTH + 18}
+            columnCount={columnCount}
+            columnWidth={cardWidth + 18}
             height={700} // 뷰포트 높이(px), 조정 가능
-            rowCount={Math.ceil(studies.length / COLUMN_COUNT)}
-            rowHeight={CARD_HEIGHT + 24}
-            width={(CARD_WIDTH + 24) * COLUMN_COUNT}
+            rowCount={Math.ceil(studies.length / columnCount)}
+            rowHeight={cardHeight + 24}
+            width={gridWidth}
             onItemsRendered={({ visibleRowStopIndex }) => {
-              console.log("visibleRowStopIndex", visibleRowStopIndex);
-              const lastVisibleIndex = (visibleRowStopIndex + 1) * COLUMN_COUNT;
-              console.log("lastVisibleIndex", lastVisibleIndex);
-
+              const lastVisibleIndex = (visibleRowStopIndex + 1) * columnCount;
               if (
                 hasMore &&
                 !loading &&
-                lastVisibleIndex >= studies.length - COLUMN_COUNT
+                lastVisibleIndex >= studies.length - columnCount
               ) {
                 fetchStudies();
               }
             }}
           >
             {({ columnIndex, rowIndex, style }) => {
-              const idx = rowIndex * COLUMN_COUNT + columnIndex;
+              const idx = rowIndex * columnCount + columnIndex;
               if (idx >= studies.length) return null;
               return (
                 <div
@@ -165,8 +161,8 @@ export default function StudyList() {
                     ...style,
                     left: (style.left as number) + 12 / 2, // 양 옆 gap/2씩
                     top: (style.top as number) + 12 / 2,
-                    width: CARD_WIDTH,
-                    height: CARD_HEIGHT,
+                    width: cardWidth,
+                    height: cardHeight,
                   }}
                 >
                   <StudyCard key={studies[idx].id} study={studies[idx]} />
