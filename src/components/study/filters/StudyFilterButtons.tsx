@@ -39,10 +39,11 @@ export default function StudyFilterBar() {
   const toggleStatus = () => {
     // 낙관적 업데이트로 즉시 버튼 색 변경
     const newStatus = optimisticStatus === "open" ? null : "open";
+    
     updateOptimisticFilter("status", newStatus);
 
     const params = new URLSearchParams(window.location.search);
-    if (optimisticStatus === "open") {
+    if (newStatus === null) {
       params.delete("status");
     } else {
       params.set("status", "open");
@@ -58,7 +59,7 @@ export default function StudyFilterBar() {
       </label>
       <select
         id="study-category"
-        value={optimisticCategory}
+        value={optimisticCategory ?? "전체"}
         onChange={(e) => updateParam("category", e.target.value)}
         className="border border-gray-300 rounded px-3 py-2 text-sm"
       >
@@ -75,7 +76,7 @@ export default function StudyFilterBar() {
       </label>
       <select
         id="study-type"
-        value={optimisticStudyType}
+        value={optimisticStudyType ?? "전체"}
         onChange={(e) => updateParam("studyType", e.target.value)}
         className="border border-gray-300 rounded px-3 py-2 text-sm"
       >

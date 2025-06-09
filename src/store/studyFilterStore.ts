@@ -45,7 +45,7 @@ export const useStudyFilterStore = create<StudyFilterState>((set, get) => ({
       status: filters.status ?? state.status,
       query: filters.query ?? state.query,
     }));
-    get().syncOptimisticState();
+    //get().syncOptimisticState();
   },
 
   updateOptimisticFilter: (key, value) => {
