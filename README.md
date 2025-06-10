@@ -4,12 +4,25 @@ Groupie는 스터디 모집 플랫폼으로, 다양한 스터디를 손쉽게 �
 Next.js와 TypeScript 기초부터 Vercel 배포, 코드 구조화, 성능 개선까지 직접 경험해보기 위해 진행한 사이드 프로젝트입니다.
 
 ---
-## 기술 스택
-- Frontend: Next.js 15, TypeScript, Tailwind CSS
-- Backend: Prisma (ORM)
-- 인증/스토리지: Lucia, AWS S3
-- 상태관리: Zustand
-- 기타: Vercel 배포
+## 🛠 기술 스택
+
+**Frontend**  
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+![Zustand](https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logoColor=white)
+
+**Backend**  
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+
+**인증 / 스토리지**  
+![Lucia](https://img.shields.io/badge/Lucia-000000?style=for-the-badge&logoColor=white)
+[![AWS S3](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/s3/)
+
+**배포**  
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+
+
 
 ---
 ## 주요 기능
