@@ -14,6 +14,7 @@ Next.js와 TypeScript 기초부터 Vercel 배포, 코드 구조화, 성능 개�
 
 **Backend**  
 [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
 **인증 / 스토리지**  
 ![Lucia](https://img.shields.io/badge/Lucia-000000?style=for-the-badge&logoColor=white)
@@ -21,7 +22,6 @@ Next.js와 TypeScript 기초부터 Vercel 배포, 코드 구조화, 성능 개�
 
 **배포**  
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
-
 
 
 ---
@@ -32,6 +32,40 @@ Next.js와 TypeScript 기초부터 Vercel 배포, 코드 구조화, 성능 개�
 - 로그인 / 회원가입 / 스크랩 / 댓글 기능
 - 인기 스터디 슬라이더
 - 마이페이지 : 내가 작성한 글, 스크랩한 스터디, 프로필 사진 업로드
+
+---
+## 화면 구성
+### 🏠 홈 화면 - 인기 스터디와 필터, 검색창으로 스터디 탐색 가능
+<div class="flex gap-6">
+  <img width="300" alt="홈페이지" src="https://github.com/user-attachments/assets/8f3e1cb9-62ba-4eb7-8b31-d9b67b8f5ccb" />
+  <img width="300" alt="홈 리스트" src="https://github.com/user-attachments/assets/c9b1dbdd-3430-4d64-807d-43f20b7be4cf" />
+</div>
+
+---
+
+### 📄 스터디 상세 페이지 - 상세 정보 확인 및 지원/댓글 작성
+<div class="flex gap-6">
+  <img width="300" alt="상세 페이지" src="https://github.com/user-attachments/assets/b9f16631-6d60-4b37-9d92-ee4d2a68940f" />
+  <img width="300" alt="댓글 작성" src="https://github.com/user-attachments/assets/5a508e17-87a9-43c0-93db-adfdff2832a3" />
+  <img width="300" alt="댓글 작성 후" src="https://github.com/user-attachments/assets/7f9cef96-da5b-40d2-911c-94845817011f" />
+</div>
+
+---
+
+### ✏️ 스터디 작성 폼 (마크다운 지원)
+<div class="flex gap-6">
+  <img width="300" alt="스터디 기본정보 작성" src="https://github.com/user-attachments/assets/a8380f12-a37b-4d22-ac84-3dc838ffd318" />
+  <img width="300" alt="스터디 본문 작성" src="https://github.com/user-attachments/assets/abdc81af-994c-4776-ac33-62554e5f1e4a" />
+</div>
+
+---
+
+### 🙋 마이페이지 – 내가 쓴 글 / 스크랩 달력
+<div class="flex gap-6">
+   <img width="300" alt="마이페이지 내가 쓴 글" src="https://github.com/user-attachments/assets/5fd4e6fa-d6c4-4251-b764-f6ac07565d3f" />
+  <img width="300" alt="마이페이지 달력" src="https://github.com/user-attachments/assets/63588869-ccec-4036-a61e-f957bd036197" />
+  <img width="300" alt="달력 상세보기" src="https://github.com/user-attachments/assets/9872e35c-ef61-4e42-a219-5edf1be186f7" />
+</div>
 
 ---
 ## 성능 최적화 과정
